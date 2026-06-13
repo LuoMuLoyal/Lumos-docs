@@ -1,9 +1,0 @@
-- Entry point at `src/main.ts` bootstraps NestJS app, applies global setup via `setupApp()` (pipes, interceptors, filters, Swagger), and registers AdminJS panel.
-- Root module (`app.module.ts`) imports feature modules (auth, account, medicines, daily-records, medicine-dose-logs, medicine-reminders, user-health-context, environment) plus cross-cutting concerns (PrismaModule as @Global, CacheModule, LoggerModule, MailModule, I18nModule).
-- Each feature module follows controller-service pattern with DTOs in dedicated `dto/` subdirectories; auth module additionally defines guards, strategies, and OAuth providers.
-- Prisma ORM manages PostgreSQL schema defined in `prisma/schema.prisma` with generated client output to `src/generated/prisma`; migrations are versioned under `prisma/migrations/`.
-- Global response envelope enforced by `ApiEnvelopeInterceptor` wrapping all successful responses with `{code, message, data}` structure; `ApiExceptionFilter` handles error formatting.
-- Configuration loaded via `@nestjs/config` with Joi validation (`environment.validation.ts`); JWT, OAuth, Tencent COS, mail, and cache configs registered as named config factories.
-- Caching layer uses Redis-backed `cache-manager` with async configuration (`CacheConfigService`); medicine module includes dedicated cache services.
-- Background job processing via BullMQ for mail delivery (`mail-queue.service.ts`).
-- OpenAPI documentation auto-generated from decorators and served at `/api/docs`.

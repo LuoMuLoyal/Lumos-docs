@@ -21,6 +21,10 @@ function toRoute(filePath: string): string {
 }
 
 function toText(name: string): string {
+  if (name === 'index.md') {
+    return '概览'
+  }
+
   if (name === 'README.md') {
     return 'README'
   }
@@ -71,6 +75,9 @@ const lucentDocsSidebar = buildSidebarItems(
 const luminousDocsSidebar = buildSidebarItems(
   fileURLToPath(new URL('../current/luminous-docs', import.meta.url)),
 )
+const apiDocsSidebar = buildSidebarItems(
+  fileURLToPath(new URL('../api', import.meta.url)),
+)
 
 export default defineConfig({
   lang: 'zh-CN',
@@ -84,7 +91,7 @@ export default defineConfig({
     nav: [
       { text: '首页', link: '/' },
       { text: 'Current', link: '/current/' },
-      { text: 'Wiki', link: '/wiki/' },
+      { text: 'API', link: '/api/' },
       { text: 'Archive', link: '/archive/' },
     ],
     sidebar: [
@@ -92,11 +99,16 @@ export default defineConfig({
         text: '概览',
         items: [
           { text: 'Current Docs', link: '/current/' },
+          { text: 'API Docs', link: '/api/' },
           { text: 'Lucent', link: '/current/lucent' },
           { text: 'Luminous', link: '/current/luminous' },
-          { text: 'Wiki 总览', link: '/wiki/' },
           { text: 'Archive 总览', link: '/archive/' },
         ],
+      },
+      {
+        text: 'API Docs',
+        collapsed: false,
+        items: apiDocsSidebar,
       },
       {
         text: 'Lucent Docs',

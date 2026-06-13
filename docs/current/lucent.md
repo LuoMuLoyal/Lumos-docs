@@ -4,4 +4,6 @@
 
 左侧侧边栏会根据 `current/lucent-docs` 目录中的 Markdown 文件自动生成。
 
-`openapi.json` 会继续保留在副本目录里，但它不是 Markdown 页面，所以不会出现在侧边栏里。
+Lucent 的 OpenAPI 合同会额外生成一组可浏览的 Markdown 页面，入口在 [API](/api/)。
+
+`openapi.json` 仍然只是生成产物快照，不作为这里的手工维护页面。

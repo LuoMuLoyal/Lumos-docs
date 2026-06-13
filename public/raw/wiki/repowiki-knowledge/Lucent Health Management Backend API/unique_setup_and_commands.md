@@ -1,5 +1,0 @@
-- Local stack managed via PowerShell scripts: `pnpm dev:stack:up` / `pnpm dev:stack:down` wrap `scripts/dev/up-local-stack.ps1` and `down-local-stack.ps1`.
-- Database migrations: `pnpm db:migrate:dev` (development), `pnpm db:migrate:test` (test), or `pnpm db:migrate:all` (PowerShell wrapper for both).
-- Medicine dataset import: `pnpm import:medicine:all` runs PowerShell script; granular targets include `import:cn:products`, `import:drugbank:drugs`, `import:drugbank:links`, `import:drugbank:targets:all/active` invoking `scripts/medicine/import-medicine-knowledge.js`.
-- E2E tests require experimental VM modules flag: `pnpm test:e2e` sets `NODE_OPTIONS=--experimental-vm-modules`.
-- Husky pre-commit hooks enforce lint-staged on *.ts files (eslint --fix + prettier --write).

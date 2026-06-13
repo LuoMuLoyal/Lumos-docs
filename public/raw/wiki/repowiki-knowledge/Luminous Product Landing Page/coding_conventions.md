@@ -1,2 +1,0 @@
-- Section anchors are used for navigation targets (e.g., `#tabs`, `#safety`) instead of Vue Router paths.
-- Product screenshots are stored in `public/images/product/` and referenced via absolute paths starting with `/`.

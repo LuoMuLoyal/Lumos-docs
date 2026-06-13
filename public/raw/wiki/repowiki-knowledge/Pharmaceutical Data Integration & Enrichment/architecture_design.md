@@ -1,4 +1,0 @@
-- **Data Ingestion Layer**: Consumes raw DrugBank exports (XML, SDF, FASTA) and Chinese regulatory Excel files (`FullDrugDetail.xlsx`, instruction sheets).
-- **Processing Core**: A Python-based ETL script (`merge_chinese_drug_data.py`) performs heuristic matching of products to instructions using approval codes and text similarity scoring.
-- **Storage/Output**: Generates a multi-sheet Excel workbook (`ChineseDrugData_Merged.xlsx`) containing enriched product records, clean instruction data, conflict logs, and linkage metadata.
-- **Dependency Direction**: Raw data sources -> Python ETL Logic -> Unified Excel Output.

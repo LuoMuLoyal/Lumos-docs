@@ -1,1 +1,0 @@
-A single-page marketing site for the Luminous health management app, featuring interactive product previews and safety boundary explanations.

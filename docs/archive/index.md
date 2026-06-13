@@ -21,13 +21,5 @@ Archive 对应的是历史归档层。
 除非你明确是在做考古、回溯或迁移比对，否则不要优先参考 Archive。
 :::
 
-- 先看 Current Docs，再看 Wiki，最后才看 Archive。
+- 先看 Current Docs 和 API Docs，最后才看 Archive。
 - 如果某个归档文件重新变成操作文档，应回到 owning repo 重建，而不是继续在归档目录里维护。
-
-## 原始文件入口
-
-<ul>
-  <li><a href="/raw/archive/raw/2026-06-06-doc-cleanup/README.md" target="_blank">archive/raw / 2026-06-06-doc-cleanup/README.md</a></li>
-</ul>
-
-这些内容当前按原始文件托管，不进入 VitePress 页面编译。

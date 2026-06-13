@@ -1,2 +1,0 @@
-- **Cross-Module Sync**: Backend API changes require running `pnpm export:openapi` in `Lucent` followed by `dart run tool/regenerate_lucent_openapi.dart` in `Luminous` to maintain client consistency.
-- **Workspace Root Operations**: Git operations must target specific child directories (e.g., `git -C Lucent status`) as the root is not a git repository.

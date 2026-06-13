@@ -1,3 +1,0 @@
-- Conventional Commits with Chinese summaries (type(scope): 中文摘要) enforced across all child repositories.
-- Backend responses strictly follow a global envelope structure { code, message, data } defined in common interceptors.
-- Frontend user-visible text must use ARB localization files rather than hardcoded strings.

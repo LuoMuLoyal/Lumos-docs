@@ -1,6 +1,0 @@
-- Entry point: `lib/main.dart` initializes `ProviderScope` and `LuminousApp` (`lib/app/app.dart`).
-- Routing: `go_router` in `lib/app/router.dart` defines declarative routes for auth, settings, and feature pages, anchored by a `ShellPage`.
-- State Management: `flutter_riverpod` is used throughout. Core state (auth session, theme, locale) is managed via `Notifier`/`AsyncNotifier` in `lib/core` and `lib/features/auth`.
-- Networking: `lib/core/network/lucent_dio_client.dart` wraps a generated OpenAPI client (`packages/lucent_openapi`) with Dio interceptors for JWT auth, token refresh, and error mapping.
-- Feature Structure: `lib/features/*` follows a layered pattern (data/domain/presentation) for modules like auth, medicine, record, and mine.
-- Shell: `lib/features/shell/presentation/shell_page.dart` provides a responsive layout with bottom navigation for mobile and a sidebar for desktop.

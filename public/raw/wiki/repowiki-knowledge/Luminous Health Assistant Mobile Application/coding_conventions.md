@@ -1,4 +1,0 @@
-- Feature modules in `lib/features` are structured into `data`, `domain`, and `presentation` subdirectories to separate concerns.
-- State management providers use `flutter_riverpod` with `freezed` for immutable state classes, typically named `*_provider.dart`.
-- Network API clients are exposed as Riverpod providers in `lib/core/network/lucent_network_providers.dart` rather than being instantiated directly in features.
-- UI themes and locales are managed via `AsyncNotifier` controllers that persist preferences to `shared_preferences`.

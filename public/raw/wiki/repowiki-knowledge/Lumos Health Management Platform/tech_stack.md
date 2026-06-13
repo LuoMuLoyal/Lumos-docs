@@ -1,1 +1,0 @@
-OpenAPI 3.0 specification serves as the cross-language boundary contract between NestJS (TypeScript) and Flutter (Dart).

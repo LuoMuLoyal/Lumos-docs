@@ -1,4 +1,0 @@
-- Environment: Uses `flutter_dotenv` to load `.env` (see `.env.example`).
-- OpenAPI Client: Generated client resides in `packages/lucent_openapi`; regeneration likely via `tool/regenerate_lucent_openapi.dart`.
-- CI: GitHub Actions workflow defined in `.github/workflows/flutter-ci.yml`.
-- Build: Standard Flutter commands (`flutter pub get`, `flutter run`, `flutter build apk/ipa`).

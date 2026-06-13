@@ -1,1 +1,0 @@
-Python with `openpyxl` for Excel I/O, `re` for approval code extraction, and standard libraries for data manipulation.

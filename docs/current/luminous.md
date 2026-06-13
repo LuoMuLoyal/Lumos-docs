@@ -4,7 +4,6 @@
 
 左侧侧边栏会根据 `current/luminous-docs` 目录中的 Markdown 文件自动生成。
 
-`assets`、`migration-log` 这类目录会按原样保留：
+`migration-log` 这类 Markdown 目录会自动出现在侧边栏里。
 
-- `migration-log` 里的 Markdown 会自动出现在侧边栏里。
-- `assets` 里的静态资源不会出现在侧边栏里，但会保留在站点中，后续如果文档要引用图片可以直接用。
+原先复制进来的设计截图和低价值静态资源已经从文档站移除，不再继续保留副本。

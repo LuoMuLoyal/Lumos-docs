@@ -1,1 +1,0 @@
-NestJS-based REST API for health tracking, medicine management, and user authentication with PostgreSQL persistence.

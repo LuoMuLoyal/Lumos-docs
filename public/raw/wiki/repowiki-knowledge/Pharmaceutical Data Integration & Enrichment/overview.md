@@ -1,1 +1,0 @@
-Integrates DrugBank structural/sequence data with Chinese regulatory drug details to produce a unified, enriched pharmaceutical knowledge base.

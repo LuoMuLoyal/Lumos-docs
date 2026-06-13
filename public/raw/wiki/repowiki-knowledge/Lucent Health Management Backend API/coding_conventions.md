@@ -1,5 +1,0 @@
-- All feature modules export a class decorated with @Module that contains only an eslint-disable comment explaining the empty class requirement for NestJS module declarations.
-- DTO classes are grouped in module-specific dto/ subdirectories with barrel exports via index.ts files for consolidated imports.
-- Service and controller spec files use .spec.ts naming convention colocated with their implementation files, tested with @swc/jest transformer.
-- Configuration values are accessed through typed enum keys (ConfigKey, EnvKey) rather than raw string literals, with registerAs() factories producing namespaced config objects.
-- Database models use snake_case column mapping via @map() decorator while TypeScript properties remain camelCase, with timestamptz(3) precision for all DateTime fields.

@@ -1,2 +1,0 @@
-- Run `python merge_chinese_drug_data.py` to execute the merging process.
-- Requires `FullDrugDetail.xlsx` and the `药品说明书数据库_医药数据查询/` directory to be present in the module root.

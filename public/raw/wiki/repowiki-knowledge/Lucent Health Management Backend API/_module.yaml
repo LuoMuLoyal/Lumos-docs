@@ -1,9 +1,0 @@
-schema_version: 1
-module_path: lucent_backend
-title: Lucent Health Management Backend API
-scope:
-    - Lucent/
-source_files: []
-depends_on: []
-related_to:
-    - path: luminous_mobile_app
