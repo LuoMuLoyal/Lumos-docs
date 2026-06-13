@@ -76,6 +76,7 @@ export default defineConfig({
   lang: 'zh-CN',
   title: 'Lumos Docs',
   description: 'Lumos 工作区文档中枢',
+  ignoreDeadLinks: [/^\/raw\//],
   themeConfig: {
     search: {
       provider: 'local',

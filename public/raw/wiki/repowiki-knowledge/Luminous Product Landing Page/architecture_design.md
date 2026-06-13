@@ -1,0 +1,4 @@
+- Built as a Nuxt 4 application with a single-page architecture centered in `app/app.vue`.
+- Uses `@nuxt/ui` for component primitives (e.g., `UIcon`) and `tailwindcss` v4 for styling via a global `main.css`.
+- State management for UI interactions (tab switching, mobile menu) is handled locally within the Vue component using `ref` and `computed`.
+- Internationalization is configured via `@nuxtjs/i18n` but currently restricted to a single `zh-CN` locale with `no_prefix` strategy.

@@ -1,0 +1,5 @@
+- Flutter SDK >=3.12.0 with Dart >=3.12.0.
+- State Management: flutter_riverpod ^3.3.1.
+- Networking: dio ^5.9.2 with openapi-generator derived client in `packages/lucent_openapi`.
+- Local Storage: sqflite ^2.4.2, shared_preferences ^2.5.4, flutter_secure_storage ^10.3.1.
+- Code Generation: freezed ^3.2.5 and json_serializable ^6.9.5 via build_runner.

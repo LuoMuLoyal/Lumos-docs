@@ -1,10 +1,10 @@
 # Archive
 
-Archive 对应的是历史归档层，当前来源目标是：
+Archive 对应的是历史归档层。
 
-```text
-docs-archive
-```
+当前已经直接复制到站点静态文件区：
+
+- `/raw/archive/raw/`
 
 ## 这层的定位
 
@@ -15,14 +15,6 @@ docs-archive
 - 归档内容只用于历史查阅
 - 不要把它们随手搬回 active docs
 
-## 典型内容
-
-- 旧计划
-- 旧审计
-- 旧设计参考
-- 迁移前日志
-- 清理过程中移出的 TODO 和草稿
-
 ## 使用规则
 
 ::: warning 历史材料不是当前依据
@@ -31,3 +23,11 @@ docs-archive
 
 - 先看 Current Docs，再看 Wiki，最后才看 Archive。
 - 如果某个归档文件重新变成操作文档，应回到 owning repo 重建，而不是继续在归档目录里维护。
+
+## 原始文件入口
+
+<ul>
+  <li><a href="/raw/archive/raw/2026-06-06-doc-cleanup/README.md" target="_blank">archive/raw / 2026-06-06-doc-cleanup/README.md</a></li>
+</ul>
+
+这些内容当前按原始文件托管，不进入 VitePress 页面编译。

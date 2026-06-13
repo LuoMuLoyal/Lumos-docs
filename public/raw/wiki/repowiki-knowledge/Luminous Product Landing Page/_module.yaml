@@ -1,0 +1,9 @@
+schema_version: 1
+module_path: luminous_site
+title: Luminous Product Landing Page
+scope:
+    - Luminous-site/
+source_files: []
+depends_on: []
+related_to:
+    - path: luminous_mobile_app

@@ -1,0 +1,8 @@
+schema_version: 1
+module_path: drug_data_etl
+title: Pharmaceutical Data Integration & Enrichment
+scope:
+    - DrugDataBase/
+source_files: []
+depends_on: []
+related_to: []

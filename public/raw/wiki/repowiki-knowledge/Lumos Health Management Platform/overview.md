@@ -1,0 +1,1 @@
+Orchestrates a NestJS backend, Flutter mobile client, and Nuxt marketing site through a strict OpenAPI-driven contract and synchronized documentation workflows.

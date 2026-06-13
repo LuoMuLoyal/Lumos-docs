@@ -1,10 +1,11 @@
 # Wiki
 
-这里对应的是派生知识层，当前来源目标是：
+这里对应的是派生知识层。
 
-```text
-repowiki/en/content
-```
+当前已经直接复制到站点静态文件区：
+
+- `/raw/wiki/repowiki-content/`
+- `/raw/wiki/repowiki-knowledge/`
 
 ## 它适合做什么
 
@@ -20,18 +21,11 @@ repowiki 更适合承担这些用途：
 - 成为部署、运行、生成契约的最终依据
 - 代替 owning repo 中随代码更新的文档
 
-## 当前已观察到的主题
+## 原始文件入口
 
-- Project Overview
-- Backend Architecture (Lucent)
-- Frontend Architecture (Luminous)
-- Database Schema & Data Model
-- API Documentation
-- Deployment & DevOps
-- Contributing Guidelines
+<ul>
+  <li><a href="/raw/wiki/repowiki-content/Getting%20Started.md" target="_blank">repowiki-content / Getting Started.md</a></li>
+  <li><a href="/raw/wiki/repowiki-knowledge/_index.yaml" target="_blank">repowiki-knowledge / _index.yaml</a></li>
+</ul>
 
-## 后续导入原则
-
-- 优先导入 `en/content/**`，先不碰 `knowledge/**`，避免重复。
-- 页面上应显式标明它是 Wiki，而不是 Current Docs。
-- 搜索排序应低于 Current Docs，高于 Archive。
+这些内容当前按原始文件托管，不进入 VitePress 页面编译。

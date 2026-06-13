@@ -1,0 +1,1 @@
+JWT with argon2 password hashing via passport-jwt strategy; BullMQ + Redis for async mail queue; Prisma 7.x with PostgreSQL adapter (@prisma/adapter-pg); AdminJS for admin panel; Tencent COS SDK for object storage; SWC compiler for TypeScript builds (nest-cli.json builder type: swc).

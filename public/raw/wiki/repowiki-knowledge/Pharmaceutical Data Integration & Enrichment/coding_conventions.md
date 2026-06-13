@@ -1,0 +1,3 @@
+- Approval codes are normalized using the regex pattern `[A-Z]{1,3}\d{8}` to extract standardized identifiers from raw text fields.
+- Text matching for product-instruction linkage uses a weighted scoring system that prioritizes generic name and manufacturer matches over brand names.
+- Excel cell content is sanitized by removing illegal characters and truncating strings exceeding 32,767 characters to prevent file corruption.

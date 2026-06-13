@@ -1,0 +1,1 @@
+A cross-platform Flutter application for health tracking, medicine management, and daily record keeping with offline support and localized UI.

@@ -1,0 +1,1 @@
+Nuxt 4 with Vue 3.5, Tailwind CSS 4, Pinia 3, and @nuxt/ui 4.8.1
