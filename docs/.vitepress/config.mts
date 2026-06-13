@@ -1,28 +1,34 @@
 import { defineConfig } from 'vitepress'
 
-// https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: "Lumos-doc",
-  description: "Documentation site for the Luminous project and the Lucent project",
+  lang: 'zh-CN',
+  title: 'Lumos Docs',
+  description: 'Lumos 工作区文档中枢',
   themeConfig: {
-    // https://vitepress.dev/reference/default-theme-config
+    search: {
+      provider: 'local',
+    },
     nav: [
-      { text: 'Home', link: '/' },
-      { text: 'Examples', link: '/markdown-examples' }
+      { text: '首页', link: '/' },
+      { text: 'Current', link: '/current/' },
+      { text: 'Wiki', link: '/wiki/' },
+      { text: 'Archive', link: '/archive/' },
     ],
-
     sidebar: [
       {
-        text: 'Examples',
+        text: '概览',
         items: [
-          { text: 'Markdown Examples', link: '/markdown-examples' },
-          { text: 'Runtime API Examples', link: '/api-examples' }
-        ]
-      }
+          { text: 'Current Docs', link: '/current/' },
+          { text: 'Lucent', link: '/current/lucent' },
+          { text: 'Luminous', link: '/current/luminous' },
+          { text: 'Wiki 总览', link: '/wiki/' },
+          { text: 'Archive 总览', link: '/archive/' },
+        ],
+      },
     ],
-
-    socialLinks: [
-      { icon: 'github', link: 'https://github.com/vuejs/vitepress' }
-    ]
-  }
+    footer: {
+      message: 'Current docs remain owned by the Lucent and Luminous repositories.',
+      copyright: 'Lumos workspace documentation hub',
+    },
+  },
 })
