@@ -5,11 +5,16 @@
     "docs:sync": "pnpm docs:sync:sources && pnpm docs:sync:openapi",
     "docs:sync:sources": "node scripts/sync-source-docs.mjs",
     "docs:sync:openapi": "node scripts/generate-openapi-docs.mjs",
+    "typecheck": "tsc -p tsconfig.json",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs"
   },
   "dependencies": {
     "vitepress": "^1.6.4"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.1",
+    "typescript": "^5.8.3"
   }
 }

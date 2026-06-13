@@ -94,6 +94,9 @@ export default defineConfig({
   lang: 'zh-CN',
   title: 'Lumos Docs',
   description: 'Lumos 工作区文档中枢',
+  head: [
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
+  ],
   ignoreDeadLinks: [/^\/raw\//],
   themeConfig: {
     search: {

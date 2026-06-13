@@ -19,6 +19,7 @@ This repository is the documentation hub, not the only source of truth.
 pnpm install
 pnpm docs:sync
 pnpm docs:sync:openapi
+pnpm typecheck
 pnpm docs:dev
 pnpm docs:build
 pnpm docs:preview

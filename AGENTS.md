@@ -15,6 +15,7 @@
 ```powershell
 pnpm install
 pnpm docs:sync
+pnpm typecheck
 pnpm docs:dev
 pnpm docs:build
 pnpm docs:preview
@@ -30,5 +31,5 @@ pnpm docs:preview
 
 ## Verification
 
-- Run `pnpm docs:build` before finishing doc-site changes.
+- Run `pnpm typecheck` and `pnpm docs:build` before finishing doc-site changes.
 - Do not commit `node_modules/`, `docs/.vitepress/cache/`, or `docs/.vitepress/dist/`.
