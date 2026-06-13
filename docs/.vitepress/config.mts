@@ -89,6 +89,9 @@ const apiDocsSidebar = buildSidebarItems(
 const archiveDocsSidebar = buildSidebarItems(
   fileURLToPath(new URL('../archive', import.meta.url)),
 )
+const wikiDocsSidebar = buildSidebarItems(
+  fileURLToPath(new URL('../wiki', import.meta.url)),
+)
 
 export default defineConfig({
   lang: 'zh-CN',
@@ -104,6 +107,7 @@ export default defineConfig({
     },
     nav: [
       { text: '首页', link: '/' },
+      { text: 'Wiki', link: '/wiki/' },
       { text: 'Current', link: '/current/' },
       { text: 'API', link: '/api/' },
       { text: 'Archive', link: '/archive/' },
@@ -112,12 +116,18 @@ export default defineConfig({
       {
         text: '概览',
         items: [
+          { text: 'Wiki', link: '/wiki/' },
           { text: 'Current Docs', link: '/current/' },
           { text: 'API Docs', link: '/api/' },
           { text: 'Lucent', link: '/current/lucent' },
           { text: 'Luminous', link: '/current/luminous' },
           { text: 'Archive 总览', link: '/archive/' },
         ],
+      },
+      {
+        text: 'Wiki',
+        collapsed: false,
+        items: wikiDocsSidebar,
       },
       {
         text: 'API Docs',
