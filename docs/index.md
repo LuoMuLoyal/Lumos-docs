@@ -19,7 +19,7 @@ features:
   - title: API Docs
     details: Lucent OpenAPI 会生成一组可浏览的 Markdown 页面，用来快速查接口、DTO 和响应结构。
   - title: Archive
-    details: 归档区保留历史计划、旧审计和清理出的旧材料，用于考古，不作为当前操作依据。
+    details: 归档区现在也会同步成可浏览的 Markdown 副本，用于回溯旧计划、旧审计和被移出的历史材料。
 ---
 ## 这不是唯一真相源
 

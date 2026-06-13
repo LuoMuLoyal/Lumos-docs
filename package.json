@@ -2,6 +2,8 @@
   "name": "lumos-docs",
   "private": true,
   "scripts": {
+    "docs:sync": "pnpm docs:sync:sources && pnpm docs:sync:openapi",
+    "docs:sync:sources": "node scripts/sync-source-docs.mjs",
     "docs:sync:openapi": "node scripts/generate-openapi-docs.mjs",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",

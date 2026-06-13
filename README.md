@@ -17,6 +17,7 @@ This repository is the documentation hub, not the only source of truth.
 
 ```powershell
 pnpm install
+pnpm docs:sync
 pnpm docs:sync:openapi
 pnpm docs:dev
 pnpm docs:build
@@ -39,3 +40,4 @@ As the site grows, keep source ownership clear:
 
 - Edit Lucent and Luminous operational docs in their own repositories.
 - Use this repo to aggregate, generate, and present them.
+- Use `pnpm docs:sync` to refresh `current/`, `archive/`, and generated API pages from sibling workspace repositories.

@@ -14,6 +14,7 @@
 
 ```powershell
 pnpm install
+pnpm docs:sync
 pnpm docs:dev
 pnpm docs:build
 pnpm docs:preview

@@ -16,7 +16,7 @@
 - Covered window: 2026-06-03 to 2026-06-17.
 - Executor: DeepSeek or another implementation agent.
 - Reviewer: Codex.
-- Repository layout: `Lucent` and `Luminous` are separate git repositories under `D:\25080\Documents\VSCodeProject\Lumos`; the workspace root is not a git repository.
+- Repository layout: `Lucent` and `Luminous` are separate git repositories under `Lumos workspace root`; the workspace root is not a git repository.
 
 ## Required Reading Before Editing
 
@@ -247,7 +247,7 @@ Possible new Luminous files:
 
 **Intent:** establish what is already dirty and what already passes before DeepSeek changes anything.
 
-- [ ] Run from `D:\25080\Documents\VSCodeProject\Lumos`:
+- [ ] Run from `Lumos workspace root`:
 
 ```powershell
 git -C Lucent status --short

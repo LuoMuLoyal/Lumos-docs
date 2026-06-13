@@ -1,12 +1,12 @@
 # Lucent OpenAPI Client
 
-Last updated: 2026-06-12
+Last updated: 2026-06-13
 
-This file records the supported Flutter client workflow. API shape comes from Lucent controller/DTO code plus generated `Lucent/docs/openapi.json`, not from prose.
+This file records the supported Flutter client workflow. API shape comes from Lucent controller/DTO code plus generated `../Lucent/docs/openapi.json`, not from prose.
 
 ## Files
 
-- Generated OpenAPI source: `Lucent/docs/openapi.json`
+- Generated OpenAPI source from the `Luminous` repo root: `../Lucent/docs/openapi.json`
 - Generated Dart package: `packages/lucent_openapi/`
 - Network wrapper: `lib/core/network/lucent_dio_client.dart`
 - Public Flutter API exports: `lib/core/network/lucent_api.dart`
@@ -15,7 +15,7 @@ This file records the supported Flutter client workflow. API shape comes from Lu
 ## Current Generated Baseline
 
 - Last known Lucent export: 47 paths / 138 schemas.
-- Generated package includes auth/account, user-scoped health context, daily records, medicine search/detail, current medicines, dose logs, environment snapshot, schedule-only medicine reminders with optional date windows, read-only reminder delivery history, user settings, report dashboard, manual weekly report AI summary, public support resources/app info, and data export request status.
+- Generated package includes auth/account, user-scoped health context, daily records, medicine search/detail, current medicines, dose logs, environment snapshot, schedule-only medicine reminders with optional date windows, read-only reminder delivery history, user settings, report dashboard, manual range-based report AI summary (`last_7_days` / `last_30_days`), public support resources/app info, and data export request status.
 - Current user-scoped business data uses `/api/v1/user/*`; account profile/security actions stay under `/api/v1/account/*`.
 
 ## Usage Rules
@@ -55,6 +55,6 @@ Generated OpenAPI client paths are covered by `.gitattributes` whitespace rules,
 
 ## Noise Boundary
 
-- `packages/lucent_openapi/` stays committed because it is a workspace dependency used by the app.
+- `packages/lucent_openapi/` stays committed because it is a local path dependency used by the app.
 - Generated Dart client code under `lib/` stays tracked.
 - Generated Markdown docs under `packages/lucent_openapi/doc/` and generated package stub tests under `packages/lucent_openapi/test/` are now intentionally disabled and cleaned by the wrapper because they add large diff noise without participating in app runtime or verification.

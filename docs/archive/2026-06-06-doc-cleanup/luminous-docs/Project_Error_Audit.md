@@ -499,7 +499,7 @@ Future audit:
 
 ```bash
 cd Luminous
-rg "MaterialPageRoute|Navigator\\.push|Navigator\\.of\\(context\\)\\.push" lib
+rg "MaterialPageRoute|Navigator//.push|Navigator//.of//(context//)//.push" lib
 ```
 
 ### ERR-FE-006: 未注册路由与死路由常量
@@ -540,7 +540,7 @@ Future audit:
 
 ```bash
 cd Luminous
-rg "catch \\(_\\) \\{\\}" lib
+rg "catch //(_//) //{//}" lib
 ```
 
 ### ERR-FE-009: 硬编码 Toast / 可见文本绕过 l10n
@@ -835,7 +835,7 @@ Future audit: 每个 signed-in 写操作必须列出 affected providers，并用
 
 ```bash
 cd Luminous
-rg "invalidate\(" lib/features
+rg "invalidate/(" lib/features
 rg "todayDashboardProvider|recordDashboardProvider|medicineWorkspaceProvider" lib test
 ```
 
@@ -992,6 +992,6 @@ git -C Luminous status --short
 git -C Lucent diff --check
 git -C Luminous diff --check -- . ':!packages/lucent_openapi/**'
 rg "lucent_openapi" Luminous/lib/features/mine Luminous/lib/features/health_context/domain Luminous/lib/features/search/presentation
-rg "MaterialPageRoute|Navigator\\.push|Navigator\\.of\\(context\\)\\.push" Luminous/lib
-rg "catch \\(_\\) \\{\\}" Luminous/lib
+rg "MaterialPageRoute|Navigator//.push|Navigator//.of//(context//)//.push" Luminous/lib
+rg "catch //(_//) //{//}" Luminous/lib
 ```

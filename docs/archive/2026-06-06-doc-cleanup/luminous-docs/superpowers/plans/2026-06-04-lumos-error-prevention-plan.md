@@ -168,7 +168,7 @@ For every nullable PATCH/write field:
 
 ```bash
 cd Luminous
-rg "includeIfNull|toJson\(|data:" lib/features test
+rg "includeIfNull|toJson/(|data:" lib/features test
 flutter test test
 ```
 
@@ -194,7 +194,7 @@ flutter test test
 
 ```bash
 cd Luminous
-rg "invalidate\(" lib/features
+rg "invalidate/(" lib/features
 flutter test test/record_page_test.dart test/medicine_workspace_repository_test.dart test/shell_page_test.dart
 flutter test
 ```
@@ -245,8 +245,8 @@ cd Luminous
 flutter gen-l10n
 flutter analyze
 flutter test
-rg "MaterialPageRoute|Navigator\.push|Navigator\.of\(context\)\.push" lib
-rg "catch \(_\) \{\}" lib
+rg "MaterialPageRoute|Navigator/.push|Navigator/.of/(context/)/.push" lib
+rg "catch /(_/) /{/}" lib
 rg "reminder|push|OCR|barcode|diagnos|treat|recommend" docs lib
 ```
 

@@ -1,5 +1,5 @@
-import { readdirSync, statSync } from 'node:fs'
-import { basename, extname, relative } from 'node:path'
+import { readdirSync } from 'node:fs'
+import { extname, relative } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { defineConfig } from 'vitepress'
 
@@ -12,6 +12,14 @@ function toPosixPath(value: string): string {
 function toRoute(filePath: string): string {
   const relativePath = toPosixPath(relative(docsRoot, filePath))
   const withoutExt = relativePath.replace(/\.md$/i, '')
+
+  if (withoutExt === 'index') {
+    return '/'
+  }
+
+  if (withoutExt.endsWith('/index')) {
+    return `/${withoutExt.slice(0, -'/index'.length)}/`
+  }
 
   if (withoutExt.endsWith('/README')) {
     return `/${withoutExt.slice(0, -'/README'.length)}/`
@@ -78,6 +86,9 @@ const luminousDocsSidebar = buildSidebarItems(
 const apiDocsSidebar = buildSidebarItems(
   fileURLToPath(new URL('../api', import.meta.url)),
 )
+const archiveDocsSidebar = buildSidebarItems(
+  fileURLToPath(new URL('../archive', import.meta.url)),
+)
 
 export default defineConfig({
   lang: 'zh-CN',
@@ -119,6 +130,11 @@ export default defineConfig({
         text: 'Luminous Docs',
         collapsed: false,
         items: luminousDocsSidebar,
+      },
+      {
+        text: 'Archive Docs',
+        collapsed: false,
+        items: archiveDocsSidebar,
       },
     ],
     footer: {

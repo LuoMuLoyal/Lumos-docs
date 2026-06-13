@@ -30,7 +30,6 @@ const spec = JSON.parse(readFileSync(localOpenApiPath, 'utf8'))
 const schemas = spec.components?.schemas ?? {}
 const operations = collectOperations(spec.paths ?? {})
 const tagMap = buildTagMap(operations)
-const generatedAt = new Date().toISOString()
 
 rmSync(apiRoot, { recursive: true, force: true })
 mkdirSync(apiRoot, { recursive: true })
@@ -38,7 +37,6 @@ mkdirSync(apiRoot, { recursive: true })
 writeFile(
   join(apiRoot, 'index.md'),
   buildApiIndexMarkdown({
-    generatedAt,
     openapiVersion: spec.openapi ?? 'unknown',
     operations,
     schemas,
@@ -146,14 +144,13 @@ function slugify(value) {
     .replace(/^-+|-+$/g, '') || 'untagged'
 }
 
-function buildApiIndexMarkdown({ generatedAt, openapiVersion, operations, schemas, tagMap }) {
+function buildApiIndexMarkdown({ openapiVersion, operations, schemas, tagMap }) {
   const lines = [
     '# API Docs',
     '',
     '> Generated from Lucent OpenAPI. Do not edit these pages by hand.',
     '',
     `- OpenAPI version: \`${escapeInline(openapiVersion)}\``,
-    `- Generated at: \`${generatedAt}\``,
     `- Paths: \`${countDistinctPaths(operations)}\``,
     `- Operations: \`${operations.length}\``,
     `- Tags: \`${tagMap.size}\``,

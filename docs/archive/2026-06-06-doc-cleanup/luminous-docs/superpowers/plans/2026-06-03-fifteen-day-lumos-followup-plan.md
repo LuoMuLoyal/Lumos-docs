@@ -16,7 +16,7 @@
 - Covered window: 2026-06-04 to 2026-06-18.
 - Executor: DeepSeek or another implementation agent.
 - Reviewer: Codex.
-- Repository layout: `Lucent` and `Luminous` are separate git repositories under `D:\25080\Documents\VSCodeProject\Lumos`; the workspace root is not a git repository.
+- Repository layout: `Lucent` and `Luminous` are separate git repositories under `Lumos workspace root`; the workspace root is not a git repository.
 
 ## Current Baseline
 
@@ -704,23 +704,23 @@ git -C Luminous commit -m "feat(medicine): 用药打卡接入今日状态"
 ### Commands
 
 ```bash
-# From D:\25080\Documents\VSCodeProject\Lumos
+# From Lumos workspace root
 git -C Lucent diff --check
 git -C Luminous diff --check
 
-# From D:\25080\Documents\VSCodeProject\Lumos\Lucent
+# From Lucent
 cd Lucent
 pnpm lint:check
 pnpm build
 pnpm test:ci
 pnpm test:e2e:ci
 
-# From D:\25080\Documents\VSCodeProject\Lumos\Luminous
+# From Luminous
 cd ../Luminous
 flutter analyze
 flutter test
 
-# From D:\25080\Documents\VSCodeProject\Lumos
+# From Lumos workspace root
 cd ..
 rg "lucent_openapi" Luminous/lib/features/record Luminous/lib/features/medicine Luminous/lib/features/today Luminous/lib/features/mine
 rg -n "diagnos|treat|recommend|reminder|push|OCR|barcode" Lucent/docs Luminous/docs

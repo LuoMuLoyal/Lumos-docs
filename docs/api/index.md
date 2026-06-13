@@ -3,7 +3,6 @@
 > Generated from Lucent OpenAPI. Do not edit these pages by hand.
 
 - OpenAPI version: `3.0.0`
-- Generated at: `2026-06-13T04:39:43.599Z`
 - Paths: `47`
 - Operations: `61`
 - Tags: `15`

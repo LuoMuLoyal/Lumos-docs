@@ -288,7 +288,7 @@ lib/
 - `browse_history_store.dart` 已使用 `ListEquality<Map>` + `MapEquality` 替代 JSON 字符串比对的模式，符合 Step 14 目标。
 - 将 `_sameEntries` 逻辑提取为 `@visibleForTesting sameBrowseHistoryEntries()` 独立函数，便于测试。
 - 新增 `test/features/mine/data/browse_history_store_test.dart`（7 tests）：覆盖相同引用、空列表、同内容、不同长度、不同内容、不同字段值、多条目同序。
-- 验证手段 `rg "jsonEncode\\(|toJson\\(\\).*==" lib` 返回零匹配。
+- 验证手段 `rg "jsonEncode//(|toJson//(//).*==" lib` 返回零匹配。
 
 **验证结果**
 
@@ -659,10 +659,10 @@ lib/
 - **生成命令**：
 
 ```bash
-openapi-generator-cli generate \
-  -g dart-dio \
-  -i ../Lucent/docs/openapi.json \
-  -o lib/api/generated \
+openapi-generator-cli generate /
+  -g dart-dio /
+  -i ../Lucent/docs/openapi.json /
+  -o lib/api/generated /
   --additional-properties=pubName=luminous_api,pubAuthor=Lumos
 ```
 

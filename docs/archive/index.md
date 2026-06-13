@@ -1,25 +1,20 @@
 # Archive
 
-Archive 对应的是历史归档层。
+> Synced from the workspace `docs-archive` directory. Read-only historical material.
 
-当前已经直接复制到站点静态文件区：
+- Snapshot count: `1`
 
-- `/raw/archive/raw/`
-
-## 这层的定位
-
-归档存在的意义不是“继续维护”，而是保留历史上下文，方便回溯。
-
-目前工作区里已经明确写过：
-
-- 归档内容只用于历史查阅
-- 不要把它们随手搬回 active docs
-
-## 使用规则
+## Usage Rules
 
 ::: warning 历史材料不是当前依据
 除非你明确是在做考古、回溯或迁移比对，否则不要优先参考 Archive。
 :::
 
 - 先看 Current Docs 和 API Docs，最后才看 Archive。
-- 如果某个归档文件重新变成操作文档，应回到 owning repo 重建，而不是继续在归档目录里维护。
+- 如果某个归档文件重新变成操作文档，应回到 owning repo 重建，而不是继续在 Archive 副本里维护。
+
+## Snapshots
+
+| Snapshot | Markdown Files | Entry |
+| --- | ---: | --- |
+| `2026-06-06-doc-cleanup` | 12 | [查看](/archive/2026-06-06-doc-cleanup/) |
