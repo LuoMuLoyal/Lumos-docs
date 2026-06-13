@@ -3,7 +3,7 @@
 这里对应的是派生知识层，当前来源目标是：
 
 ```text
-../.qoder/repowiki/en/content
+repowiki/en/content
 ```
 
 ## 它适合做什么

@@ -3,7 +3,7 @@
 Archive 对应的是历史归档层，当前来源目标是：
 
 ```text
-../docs-archive
+docs-archive
 ```
 
 ## 这层的定位

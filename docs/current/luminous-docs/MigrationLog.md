@@ -7,7 +7,7 @@ Records changes after the full reset only. Detailed entries are split by date un
 Pre-reset history and inactive long-form docs were moved outside git to:
 
 ```text
-D:\25080\Documents\VSCodeProject\Lumos\docs-archive\2026-06-06-doc-cleanup
+docs-archive/2026-06-06-doc-cleanup
 ```
 
 ## How To Update

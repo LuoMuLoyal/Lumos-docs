@@ -33,7 +33,7 @@ This directory keeps current product, frontend, and workflow documentation for t
 Old plans, audits, and superseded design references should not stay in active docs. If they are needed for archaeology, use the workspace archive outside this repo:
 
 ```text
-D:\25080\Documents\VSCodeProject\Lumos\docs-archive
+docs-archive
 ```
 
 Active repo-local plans, when needed, belong in:

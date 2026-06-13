@@ -2,11 +2,11 @@
 
 Last updated: 2026-06-12
 
-This file records the supported Flutter client workflow. API shape comes from Lucent controller/DTO code plus generated `../Lucent/docs/openapi.json`, not from prose.
+This file records the supported Flutter client workflow. API shape comes from Lucent controller/DTO code plus generated `Lucent/docs/openapi.json`, not from prose.
 
 ## Files
 
-- Generated OpenAPI source from the `Luminous` repo root: `../Lucent/docs/openapi.json`
+- Generated OpenAPI source: `Lucent/docs/openapi.json`
 - Generated Dart package: `packages/lucent_openapi/`
 - Network wrapper: `lib/core/network/lucent_dio_client.dart`
 - Public Flutter API exports: `lib/core/network/lucent_api.dart`
@@ -55,6 +55,6 @@ Generated OpenAPI client paths are covered by `.gitattributes` whitespace rules,
 
 ## Noise Boundary
 
-- `packages/lucent_openapi/` stays committed because it is a local path dependency used by the app.
+- `packages/lucent_openapi/` stays committed because it is a workspace dependency used by the app.
 - Generated Dart client code under `lib/` stays tracked.
 - Generated Markdown docs under `packages/lucent_openapi/doc/` and generated package stub tests under `packages/lucent_openapi/test/` are now intentionally disabled and cleaned by the wrapper because they add large diff noise without participating in app runtime or verification.

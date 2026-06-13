@@ -7,7 +7,7 @@ Last updated: 2026-06-05
 Local external data directory:
 
 ```text
-D:\25080\Documents\VSCodeProject\Lumos\DrugDataBase
+DrugDataBase
 ```
 
 This directory is not tracked by Git and must not be packaged into Flutter.

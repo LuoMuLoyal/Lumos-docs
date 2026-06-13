@@ -9,7 +9,7 @@ This file records current implementation facts only. Product direction lives in 
 - `Lucent` is the active NestJS backend.
 - `Luminous` is the active Flutter client.
 - `Luminous/backend` is legacy reference only.
-- `D:\25080\Documents\VSCodeProject\Lumos` is not a git repository; `Lucent` and `Luminous` are separate child repositories.
+- The workspace root is not a git repository; `Lucent` and `Luminous` are separate child repositories.
 
 ## Product Surface
 

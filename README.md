@@ -7,11 +7,11 @@ VitePress document site for the Lumos workspace.
 This repository is the documentation hub, not the only source of truth.
 
 - Current project docs still belong to their owning repositories:
-  - `../Lucent/docs`
-  - `../Luminous/docs`
+  - `Lucent/docs`
+  - `Luminous/docs`
 - Derived knowledge can be imported from:
-  - `../.qoder/repowiki`
-  - `../docs-archive`
+  - `repowiki`
+  - `docs-archive`
 - This repo should own hub-specific content such as navigation, landing pages, grouping, search presentation, and future sync scripts.
 
 ## Commands
