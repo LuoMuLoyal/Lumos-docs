@@ -2,7 +2,7 @@
 
 > Generated from Lucent OpenAPI tag grouping.
 
-- Operations: `12`
+- Operations: `14`
 
 ## `POST /api/v1/auth/forgot-password`
 
@@ -204,6 +204,36 @@
 | --- | --- | --- |
 | `200` |  | [SendVerificationCodeResponseDto](../schemas/SendVerificationCodeResponseDto) |
 | `429` | 验证码接口请求过多 | `unknown` |
+
+## `GET /api/v1/auth/sessions`
+
+- Summary: 列出当前用户的活跃会话
+- Operation ID: `AuthController_listSessions_v1`
+- Auth: `access-token`
+
+### Responses
+
+| Status | Description | Schema |
+| --- | --- | --- |
+| `200` |  | `unknown` |
+
+## `DELETE /api/v1/auth/sessions/{sessionId}`
+
+- Summary: 撤销指定会话
+- Operation ID: `AuthController_revokeSession_v1`
+- Auth: `access-token`
+
+### Parameters
+
+| In | Name | Required | Type | Description |
+| --- | --- | --- | --- | --- |
+| path | `sessionId` | yes | `string` |  |
+
+### Responses
+
+| Status | Description | Schema |
+| --- | --- | --- |
+| `200` |  | `unknown` |
 
 ## `POST /api/v1/auth/verify-email`
 

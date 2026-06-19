@@ -3,10 +3,10 @@
 > Generated from Lucent OpenAPI. Do not edit these pages by hand.
 
 - OpenAPI version: `3.0.0`
-- Paths: `47`
-- Operations: `61`
-- Tags: `15`
-- Schemas: `138`
+- Paths: `62`
+- Operations: `76`
+- Tags: `16`
+- Schemas: `171`
 
 ## Sections
 
@@ -17,19 +17,20 @@
 
 | Tag | Operations | Link |
 | --- | ---: | --- |
-| Account | 9 | [查看](./tags/account) |
-| App | 1 | [查看](./tags/app) |
-| Auth | 12 | [查看](./tags/auth) |
-| Daily Records | 7 | [查看](./tags/daily-records) |
+| Account | 10 | [查看](./tags/account) |
+| Assistant | 6 | [查看](./tags/assistant) |
+| Auth | 14 | [查看](./tags/auth) |
+| Daily Records | 8 | [查看](./tags/daily-records) |
 | Data Export | 2 | [查看](./tags/data-export) |
 | Environment | 1 | [查看](./tags/environment) |
+| Health | 4 | [查看](./tags/health) |
 | Medicine Dose Logs | 4 | [查看](./tags/medicine-dose-logs) |
 | Medicine Reminders | 4 | [查看](./tags/medicine-reminders) |
 | Medicines | 2 | [查看](./tags/medicines) |
 | Reminder Deliveries | 1 | [查看](./tags/reminder-deliveries) |
-| Reports | 2 | [查看](./tags/reports) |
+| Reports | 3 | [查看](./tags/reports) |
 | Support Resources | 2 | [查看](./tags/support-resources) |
-| Today Analysis | 1 | [查看](./tags/today-analysis) |
+| Today Analysis | 2 | [查看](./tags/today-analysis) |
 | User Health Context | 11 | [查看](./tags/user-health-context) |
 | User Settings | 2 | [查看](./tags/user-settings) |
 
@@ -46,6 +47,7 @@
 | `POST` | `/api/v1/account/identities/wechat-web/authorize` | [Account](./tags/account) | Create WeChat web OAuth authorize URL for linking |
 | `POST` | `/api/v1/account/identities/wechat-web/callback` | [Account](./tags/account) | Link WeChat web identity to authenticated account |
 | `POST` | `/api/v1/account/password` | [Account](./tags/account) | Change authenticated account password |
+| `POST` | `/api/v1/account/set-password` | [Account](./tags/account) | Set initial password for OAuth-only account using email verification |
 | `POST` | `/api/v1/auth/forgot-password` | [Auth](./tags/auth) | 忘记密码 |
 | `POST` | `/api/v1/auth/login` | [Auth](./tags/auth) | 用户登录 |
 | `POST` | `/api/v1/auth/logout` | [Auth](./tags/auth) | 用户登出 |
@@ -57,19 +59,31 @@
 | `POST` | `/api/v1/auth/register` | [Auth](./tags/auth) | 用户注册 |
 | `POST` | `/api/v1/auth/reset-password` | [Auth](./tags/auth) | 重置密码 |
 | `POST` | `/api/v1/auth/send-verification-code` | [Auth](./tags/auth) | 发送邮箱验证码 |
+| `GET` | `/api/v1/auth/sessions` | [Auth](./tags/auth) | 列出当前用户的活跃会话 |
+| `DELETE` | `/api/v1/auth/sessions/{sessionId}` | [Auth](./tags/auth) | 撤销指定会话 |
 | `POST` | `/api/v1/auth/verify-email` | [Auth](./tags/auth) | 验证邮箱 |
 | `GET` | `/api/v1/environment/snapshot` | [Environment](./tags/environment) | Get static environment snapshot reference data |
-| `GET` | `/api/v1/health` | [App](./tags/app) | AppController_getHealth_v1 |
+| `GET` | `/api/v1/health` | [Health](./tags/health) | Readiness probe alias used by existing scripts |
+| `GET` | `/api/v1/health/deep` | [Health](./tags/health) | Detailed health probe with per-component diagnostics |
+| `GET` | `/api/v1/health/live` | [Health](./tags/health) | Liveness probe for process health |
+| `GET` | `/api/v1/health/ready` | [Health](./tags/health) | Readiness probe for critical runtime dependencies |
 | `GET` | `/api/v1/medicines` | [Medicines](./tags/medicines) | Search medicines from a selected knowledge source |
 | `GET` | `/api/v1/medicines/{id}` | [Medicines](./tags/medicines) | Get medicine detail from a selected knowledge source |
 | `GET` | `/api/v1/public/app-info` | [Support Resources](./tags/support-resources) | Get application metadata |
 | `GET` | `/api/v1/public/support-resources` | [Support Resources](./tags/support-resources) | Get static support resource entries |
+| `GET` | `/api/v1/user/assistant/capabilities` | [Assistant](./tags/assistant) | Get authenticated user assistant capabilities and permissions |
+| `GET` | `/api/v1/user/assistant/conversations` | [Assistant](./tags/assistant) | List recent persisted assistant conversations for the user |
+| `POST` | `/api/v1/user/assistant/conversations/{conversationId}/open` | [Assistant](./tags/assistant) | Activate one persisted assistant conversation and return its full history |
+| `GET` | `/api/v1/user/assistant/latest` | [Assistant](./tags/assistant) | Get the authenticated user latest persisted assistant conversation |
+| `POST` | `/api/v1/user/assistant/latest/clear` | [Assistant](./tags/assistant) | Archive the authenticated user latest active assistant conversation |
+| `POST` | `/api/v1/user/assistant/messages/stream` | [Assistant](./tags/assistant) | Stream authenticated user assistant response |
 | `GET` | `/api/v1/user/daily-records` | [Daily Records](./tags/daily-records) | List daily records for a given date |
 | `POST` | `/api/v1/user/daily-records` | [Daily Records](./tags/daily-records) | Create a daily record |
 | `GET` | `/api/v1/user/daily-records/{id}` | [Daily Records](./tags/daily-records) | Get a daily record by id |
 | `PATCH` | `/api/v1/user/daily-records/{id}` | [Daily Records](./tags/daily-records) | Update a daily record |
 | `DELETE` | `/api/v1/user/daily-records/{id}` | [Daily Records](./tags/daily-records) | Soft-delete a daily record |
 | `POST` | `/api/v1/user/daily-records/attachments/images/presign-upload` | [Daily Records](./tags/daily-records) | Create a Tencent COS signed URL for daily record image upload |
+| `POST` | `/api/v1/user/daily-records/candidate-records/generate` | [Daily Records](./tags/daily-records) | Generate AI candidate daily records from a natural-language note |
 | `GET` | `/api/v1/user/daily-records/summary` | [Daily Records](./tags/daily-records) | Get daily record summary (counts by kind) |
 | `POST` | `/api/v1/user/data-export-requests` | [Data Export](./tags/data-export) | Create a new data export request |
 | `GET` | `/api/v1/user/data-export-requests/latest` | [Data Export](./tags/data-export) | Get the latest data export request |
@@ -95,6 +109,8 @@
 | `GET` | `/api/v1/user/reminder-deliveries` | [Reminder Deliveries](./tags/reminder-deliveries) | List reminder delivery audit logs |
 | `GET` | `/api/v1/user/reports/dashboard` | [Reports](./tags/reports) | Get authenticated user report dashboard |
 | `POST` | `/api/v1/user/reports/summary/generate` | [Reports](./tags/reports) | Generate authenticated user AI summary for report |
+| `POST` | `/api/v1/user/reports/summary/generate/stream` | [Reports](./tags/reports) | Stream authenticated user AI summary generation for report |
 | `GET` | `/api/v1/user/settings` | [User Settings](./tags/user-settings) | Get authenticated user settings |
 | `PATCH` | `/api/v1/user/settings` | [User Settings](./tags/user-settings) | Update authenticated user settings |
 | `POST` | `/api/v1/user/today-analysis/generate` | [Today Analysis](./tags/today-analysis) | Generate authenticated user today AI analysis |
+| `POST` | `/api/v1/user/today-analysis/generate/stream` | [Today Analysis](./tags/today-analysis) | Stream authenticated user today AI analysis generation |

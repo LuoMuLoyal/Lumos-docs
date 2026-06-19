@@ -7,6 +7,7 @@ This replaces the long historical error audit as the current quick-read checklis
 ## Documentation
 
 - Do not duplicate the same fact across docs. Product decisions go in `Product_Vision.md`; current facts in `Current_State.md`; next work in `Next_Plan.md`; history in `MigrationLog.md`.
+- Do not record implementation status, completed work, or current runtime truth in `Next_Plan.md`. If it is already true now, move it to `Current_State.md` or `MigrationLog.md`.
 - Active multi-step execution plans belong in `../plans/`, not in `docs/` and not in the workspace root.
 - Do not keep old execution plans in active docs after they are superseded. Move useful decisions into the owning doc and delete the plan.
 - Do not use migration logs as current source of truth; they are historical records only.
@@ -41,6 +42,8 @@ This replaces the long historical error audit as the current quick-read checklis
 - Do not let deferred capability drift into ambiguous half-active UI. If a future feature must stay visible before its contract exists, keep it clearly placeholder-only and keep docs in sync with that choice.
 - For mobile UI refinement, "avoid nested boxes" means keep the necessary outer section panel and replace only inner cards with rows, dividers, pills, or controls. Do not flatten an entire section into loose dividers when the outer panel provides visual grouping.
 - The mobile MVP bottom navigation is frozen as `today / record / medicine / report / mine`. Do not add or revive a generic More tab; route low-frequency utilities through Mine, contextual Today actions, or defer them.
+- Do not hide shared business data under one page feature just because it was first used there. If the same provider/service is consumed by Mine, Medicine, and Settings, move it to a neutral feature boundary such as `features/support/` instead of leaving it nested under `settings`.
+- Keep design-system primitives in `lib/core/design/`. Do not split responsive breakpoints or theme seed colors into parallel `core/constants` files when they are part of the same UI token system.
 
 ## CI/CD And Generated Files
 
@@ -48,11 +51,13 @@ This replaces the long historical error audit as the current quick-read checklis
 - Do not edit generated Prisma client manually.
 - Do not manually normalize generated OpenAPI client Markdown just to make diffs pretty.
 - Generated OpenAPI client whitespace warnings are handled via `.gitattributes`; do not add repo-specific cleanup steps just to strip generated trailing spaces.
+- Do not describe the Android emulator + Lucent test-runtime lane as already covered by GitHub Actions. The current CI boundary is repo-safe Flutter checks only; full-stack E2E remains a local/manual gate through `tool/run_fullstack_checks.ps1`.
 
 ## Verification
 
 - Backend focused change: `pnpm lint:check`, `pnpm build`, relevant tests, `pnpm export:openapi` if API changed.
 - Frontend focused change: `flutter analyze`, relevant tests or `flutter test`.
 - Cross-contract change: run both backend OpenAPI export and Luminous client regeneration.
+- Prefer `powershell -ExecutionPolicy Bypass -File tool/run_daily_checks.ps1` for repo-safe frontend verification and `powershell -ExecutionPolicy Bypass -File tool/run_fullstack_checks.ps1` for the local emulator gate instead of retyping long command chains.
 - Run emulator integration tests sequentially per device. Do not run multiple `flutter test integration_test/... -d emulator-5554` commands concurrently against the same emulator; they can race app install / VM service attachment and fail with device-level errors.
 - Long-running emulator tests need an explicit timeout and investigation path. If a single scenario stalls for minutes, inspect the test wait condition and device logs instead of repeatedly waiting for the same timeout.

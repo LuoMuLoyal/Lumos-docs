@@ -2,7 +2,7 @@
 
 > Generated from Lucent OpenAPI tag grouping.
 
-- Operations: `7`
+- Operations: `8`
 
 ## `GET /api/v1/user/daily-records`
 
@@ -120,6 +120,24 @@
 | Status | Description | Schema |
 | --- | --- | --- |
 | `201` |  | [DailyRecordImageUploadResponseDto](../schemas/DailyRecordImageUploadResponseDto) |
+
+## `POST /api/v1/user/daily-records/candidate-records/generate`
+
+- Summary: Generate AI candidate daily records from a natural-language note
+- Operation ID: `DailyRecordsController_generateCandidates_v1`
+- Auth: `access-token`
+
+### Request Body
+
+| Content-Type | Required | Schema |
+| --- | --- | --- |
+| `application/json` | yes | [GenerateDailyRecordCandidatesDto](../schemas/GenerateDailyRecordCandidatesDto) |
+
+### Responses
+
+| Status | Description | Schema |
+| --- | --- | --- |
+| `200` |  | [DailyRecordCandidateResponseDto](../schemas/DailyRecordCandidateResponseDto) |
 
 ## `GET /api/v1/user/daily-records/summary`
 

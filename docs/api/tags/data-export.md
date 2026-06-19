@@ -10,6 +10,12 @@
 - Operation ID: `DataExportController_createRequest_v1`
 - Auth: `access-token`
 
+### Request Body
+
+| Content-Type | Required | Schema |
+| --- | --- | --- |
+| `application/json` | yes | [CreateDataExportRequestDto](../schemas/CreateDataExportRequestDto) |
+
 ### Responses
 
 | Status | Description | Schema |

@@ -16,6 +16,7 @@
 | `unit` | `object` | no | Unit label. |
 | `note` | `object` | no | Free-text note. |
 | `source` | `object` | no | Source. |
+| `payload` | `object` | no | Structured payload for kind-specific data. For sleep: { startAt, endAt, durationMinutes, quality?, deepMinutes?, lightMinutes?, remMinutes? }. |
 | `attachments` | array<[DailyRecordAttachmentDto](./DailyRecordAttachmentDto)> | yes |  |
 | `createdAt` | `string` | yes | Created at (ISO 8601). |
 | `updatedAt` | `string` | yes | Updated at (ISO 8601). |

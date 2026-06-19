@@ -1,14 +1,10 @@
 # Luminous Migration Log
 
-Last updated: 2026-06-13
+Last updated: 2026-06-19
 
 Records changes after the full reset only. Detailed entries are split by date under `docs/migration-log/`.
 
-Pre-reset history and inactive long-form docs were moved outside git to:
-
-```text
-docs-archive/2026-06-06-doc-cleanup
-```
+Pre-reset history and inactive long-form docs were moved outside git to the workspace-level archive, under the `docs-archive/2026-06-06-doc-cleanup` folder.
 
 ## How To Update
 
@@ -19,6 +15,10 @@ docs-archive/2026-06-06-doc-cleanup
 
 ## Entries
 
+- [2026-06-19](migration-log/2026-06-19.md)
+- [2026-06-18](migration-log/2026-06-18.md)
+- [2026-06-17](migration-log/2026-06-17.md)
+- [2026-06-14](migration-log/2026-06-14.md)
 - [2026-06-13](migration-log/2026-06-13.md)
 - [2026-06-12](migration-log/2026-06-12.md)
 - [2026-06-11](migration-log/2026-06-11.md)

@@ -2,7 +2,7 @@
 
 > Generated from Lucent OpenAPI tag grouping.
 
-- Operations: `9`
+- Operations: `10`
 
 ## `GET /api/v1/account`
 
@@ -153,6 +153,24 @@
 | Content-Type | Required | Schema |
 | --- | --- | --- |
 | `application/json` | yes | [ChangePasswordDto](../schemas/ChangePasswordDto) |
+
+### Responses
+
+| Status | Description | Schema |
+| --- | --- | --- |
+| `200` |  | [SuccessResponseDto](../schemas/SuccessResponseDto) |
+
+## `POST /api/v1/account/set-password`
+
+- Summary: Set initial password for OAuth-only account using email verification
+- Operation ID: `AccountController_setPassword_v1`
+- Auth: `access-token`
+
+### Request Body
+
+| Content-Type | Required | Schema |
+| --- | --- | --- |
+| `application/json` | yes | [SetPasswordDto](../schemas/SetPasswordDto) |
 
 ### Responses
 
