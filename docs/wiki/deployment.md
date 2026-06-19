@@ -49,9 +49,9 @@ cp .env.example .env
 
 详细配置见 [Lucent 环境文档](/current/lucent-docs/environment)。
 
-## Tencent Cloud CI/CD
+## Cloud 部署
 
-后端部署到腾讯云的流程见 [Tencent Cloud CI/CD 文档](/current/lucent-docs/tencent-cloud-cicd)。
+后端部署流程见 [Lucent 部署文档](/current/lucent-docs/deployment)。
 
 ## Flutter 构建
 

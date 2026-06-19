@@ -59,7 +59,7 @@ Lucent controller/DTO
 - **框架**: NestJS 11
 - **ORM**: Prisma 7 / PostgreSQL
 - **缓存/队列**: Redis / BullMQ
-- **认证**: Passport JWT + WeChat OAuth
+- **认证**: Passport JWT + WeChat OAuth + 邮箱验证码（支持 OAuth-only 设密码/删号）
 - **AI**: LangChain-based integration (OpenAI-compatible)
 - **管理面板**: AdminJS (`/admin`)
 
@@ -67,20 +67,42 @@ Lucent controller/DTO
 
 ```text
 src/
-├── modules/           # 业务功能模块
-│   ├── auth/          # 认证与授权
-│   ├── account/       # 账户管理
-│   ├── user/          # 用户信息
-│   ├── health-context/ # 健康上下文
-│   ├── daily-records/ # 日常记录
-│   ├── dose-logs/     # 用药记录
-│   └── medicines/     # 药品管理
-├── common/            # 公共工具和装饰器
-├── config/            # 配置模块
-├── generated/         # 生成代码
-├── i18n/              # 国际化
-├── mail/              # 邮件服务
-└── prisma/            # Prisma 服务
+├── modules/             # 业务功能模块
+│   ├── auth/            # 认证与授权（委托给 4 个子服务）
+│   ├── account/         # 账户管理
+│   ├── user/            # 用户信息
+│   ├── user-health-context/ # 健康上下文 + profile 写规范化
+│   ├── daily-records/   # 日常记录 + NLP 候选生成
+│   ├── medicine-dose-logs/  # 用药剂量记录
+│   ├── medicine-reminders/  # 用药提醒
+│   ├── medicines/       # 药品管理 + 数据源导入
+│   ├── reports/         # 报告（dashboard + AI summary）
+│   ├── data-export/     # 数据导出（PDF 生成 + COS 存储）
+│   ├── assistant/       # AI 助手（LangGraph agent + 工具）
+│   ├── today-analysis/  # 今日 AI 分析
+│   ├── support-resources/ # 校园支持资源
+│   ├── environment/     # 环境快照
+│   ├── user-settings/   # 用户设置
+│   ├── llm-runtime/     # LLM 运行时（provider/model 构建）
+│   └── testing-support/ # 测试辅助
+├── common/              # 公共工具和装饰器
+├── config/              # 配置模块（env 验证，无代码级 secret fallback）
+├── generated/           # 生成代码
+├── i18n/                # 国际化
+├── mail/                # 邮件服务
+└── prisma/              # Prisma 服务
+```
+
+### Auth 委托架构
+
+`AuthService` 不再直接操作 cache/prisma 进行认证操作，而是委托给 4 个 `@Injectable()` 子服务：
+
+```
+AuthService（编排层）
+  ├── AuthTokenService       # JWT 签发/刷新/撤销/会话列表
+  ├── AuthRateLimitService   # 登录限流/失败计数/Cache 读写
+  ├── AuthOAuthStateService  # OAuth 状态生命周期
+  └── AuthOAuthService       # OAuth 用户查找/创建/身份绑定
 ```
 
 ### 响应格式

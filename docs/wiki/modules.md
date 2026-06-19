@@ -4,11 +4,34 @@
 
 ### auth
 
-认证与授权模块。处理用户登录、注册、JWT token 管理和 WeChat OAuth。
+认证与授权模块。处理用户登录、注册、JWT token 管理、WeChat OAuth 和账户安全。
 
-- JWT access/refresh token 通过环境变量配置密钥
+- JWT access/refresh token 通过环境变量配置密钥（无代码级 fallback）
 - 支持 WeChat Web 和 Mobile OAuth 登录
 - 使用 Passport JWT 策略
+
+**授权架构（委托模式）：**
+
+`AuthService` 将专项逻辑委托给 4 个子服务：
+
+| 子服务 | 职责 |
+| --- | --- |
+| `AuthTokenService` | JWT 签发、刷新、撤销、会话列表、refresh token hash |
+| `AuthRateLimitService` | 登录频率限制、失败计数、锁定管理 |
+| `AuthOAuthStateService` | OAuth 状态管理（创建、消费、回跳 URL 构建） |
+| `AuthOAuthService` | OAuth 用户查找/创建、身份绑定、登录后更新 |
+
+**账户安全端点：**
+
+| 端点 | 说明 |
+| --- | --- |
+| `POST /account/set-password` | OAuth-only 用户设置初始密码（邮箱验证码） |
+| `POST /account/password` | 有密码用户修改密码（旧密码验证） |
+| `DELETE /account` | 删号——密码或邮箱验证码双通道 |
+| `GET /auth/sessions` | 列出当前用户活跃会话 |
+| `DELETE /auth/sessions/:id` | 撤销指定会话 |
+
+**验证码场景：** `register` → `login` → `reset-password` → `change-email` → `set-password` → `delete-account`
 
 ### account
 
@@ -48,17 +71,30 @@
 
 | 路径 | 职责 |
 | --- | --- |
-| `core/network/` | HTTP 客户端、拦截器、认证 token 管理 |
+| `core/network/` | HTTP 客户端、拦截器、认证 token 管理、SSE 流式 |
+| `core/router/` | GoRouter 配置 + 外部 URL 启动器 |
 | `core/feedback/` | Toast 反馈工具 (`app_toast.dart`) |
-| `core/widgets/` | 通用组件（`AppStateErrorView`、`AppStateSkeletonView` 等） |
+| `core/widgets/` | 通用组件（`AppStateErrorView`、`AppStateSkeletonView`、`PageScaffoldShell`） |
+| `core/design/` | 设计 tokens（颜色、间距、圆角、阴影、排版） |
+| `core/i18n/` | 国际化控制器 |
 
 ### features/
 
-功能模块层，按业务领域组织。每个 feature 通常包含：
+功能模块层，按业务领域组织。核心 features：
 
-- 页面 (pages/screens)
-- 状态管理 (Riverpod providers)
-- 业务逻辑
+| Feature | 职责 |
+| --- | --- |
+| `auth/` | 登录/注册页面、账户设置、session 恢复 |
+| `today/` | 今日概览、AI 日分析（SSE 流式） |
+| `record/` | 记录 CRUD、NLP 候选记录、睡眠结构化录入 |
+| `medicine/` | 药品查询、用药盒、提醒、风险检查 |
+| `report/` | 周报 dashboard、AI 周总结、PDF 导出 |
+| `assistant/` | AI 助手工作区（独立路由 `/assistant`） |
+| `mine/` | 个人中心、校园服务、健康档案 |
+| `settings/` | 设置页、语言/主题、通知、数据导出 |
+| `search/` | 药品/内容搜索 |
+| `support/` | 校园支持资源（共享 provider） |
+| `health_context/` | 健康上下文（过敏、用药、个人资料） |
 
 ### shared/
 
