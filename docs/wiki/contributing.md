@@ -76,7 +76,7 @@ flutter test
 | --- | --- |
 | 后端 API 变更 | 运行 `pnpm export:openapi` |
 | 环境变量变更 | `Lucent/docs/environment.md` |
-| 部署流程变更 | `Lucent/docs/tencent-cloud-cicd.md` |
+| 部署流程变更 | `Lucent/docs/deployment.md` |
 | 药品数据源变更 | `Lucent/docs/public/data-sources.md` |
 | 前端 UI/状态变更 | `Luminous/docs/Current_State.md` |
 | 前端可见变更 | `Luminous/docs/migration-log/YYYY-MM-DD.md` |
