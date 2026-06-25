@@ -10,6 +10,7 @@
 | --- | --- | --- | --- |
 | `kind` | [DailyRecordKind](./DailyRecordKind) | yes |  |
 | `occurredAt` | `string` | yes | Date in YYYY-MM-DD format. For sleep records this is the wake date (the morning the user wakes up from that sleep). |
+| `occurredTime` | `string` | no | Time in HH:mm 24-hour format. When omitted, UI flows may treat the record as date-only. |
 | `title` | `string` | no | Short label. |
 | `value` | `string` | no | Measured value. |
 | `unit` | `string` | no | Unit label. |

@@ -2,7 +2,7 @@
 
 > Synced from the workspace `docs-archive` directory. Read-only historical material.
 
-- Snapshot count: `1`
+- Snapshot count: `2`
 
 ## Usage Rules
 
@@ -18,3 +18,4 @@
 | Snapshot | Markdown Files | Entry |
 | --- | ---: | --- |
 | `2026-06-06-doc-cleanup` | 12 | [查看](/archive/2026-06-06-doc-cleanup/) |
+| `2026-06-25-plans-cleanup` | 3 | [查看](/archive/2026-06-25-plans-cleanup/) |

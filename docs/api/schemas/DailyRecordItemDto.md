@@ -11,6 +11,7 @@
 | `id` | `string` | yes | Record id. |
 | `kind` | [DailyRecordKind](./DailyRecordKind) | yes |  |
 | `occurredAt` | `string` | yes | Date in YYYY-MM-DD format. |
+| `occurredTime` | `object | null` | no | Time in HH:mm 24-hour format when available. |
 | `title` | `object` | no | Short label. |
 | `value` | `object` | no | Measured value. |
 | `unit` | `object` | no | Unit label. |

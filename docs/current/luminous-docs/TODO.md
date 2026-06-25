@@ -1,8 +1,31 @@
 # Luminous TODO
 
-Last updated: 2026-06-17
+Last updated: 2026-06-23
 
 This file records work that is still missing or intentionally gated. Current facts belong in `Current_State.md`; implementation order belongs in `Next_Plan.md`.
+
+## Golden 测试（搁置）
+
+- [ ] **Register page golden**: 需完整 auth provider 链路 + `AuthShell(enableFormAnimation: false)`
+- [ ] **Report sections golden**: 需独立提取 `ReportScoreHero` / `ReportMetricsGrid` section widget
+- [ ] **生成基线**: `flutter test --update-goldens test/golden/`
+
+## 延后（有明确原因）
+
+- `ReportPanel` / `MedicinePanel` 默认 padding (md→lg) — 布局溢出，当前默认与 `AppLayoutTokens.cardPadding` 一致
+- `formz` 表单校验 — 新增依赖，当前 AppToast 校验模式工作正常
+- `intl.DateFormat` 替代 ISO 字符串 — padLeft 是线协议格式，DateFormat 不适用
+- `TodayPalette` / `ReportPalette` 移除 — 使用量小，参照 MedicinePalette 模式逐模块消除
+
+## Not MVP
+
+- Women-health / period management.
+- Sports recovery.
+- Specialist health packs.
+- Smart devices.
+- Family profiles.
+- Skin recognition.
+- Desktop-first workflows.
 
 ## MVP Gaps To Close
 

@@ -1,86 +1,41 @@
 # Luminous Next Plan
 
-Last updated: 2026-06-19
+Last updated: 2026-06-25
 
-This file records the next implementation order only. Completed work belongs in `MigrationLog.md`; current facts belong in `Current_State.md`.
+This file records the next implementation order only. Completed work belongs in `migration-log/YYYY-MM-DD.md`; current facts belong in `Current_State.md`.
 
 ## Current Goal
 
-The next active slice is **Record fast-entry UX**.
+The next active slice is **bounded assistant leaflet RAG planning and backend implementation prep** in Lucent.
 
 ## Immediate Work Order
 
-1. **Reshape Record around fast entry**
-   - Priority order:
-     - tap a record type -> open a lightweight fast-entry surface first
-     - common values save quickly with the current time
-     - “more” opens the full form
-     - present `note` as the user-facing custom record entry
-   - Mood:
-     - reserve a mood entry point, but do not let mood become the main job of
-       this slice
-   - Success signal:
-     - Record becomes faster to use day to day without needing the assistant
-       for every small entry
-
-2. **Keep assistant evolution bounded to concrete new scenarios**
-   - Only extend assistant tools/proposals when a specific missing user task is chosen
-   - Do not reopen broad tool refactors without a new capability target
-   - Keep memory optional, explicit, and user-controlled when new assistant work resumes
-
-3. **Add RAG later as one extra tool, not as the starting architecture**
+1. **Start RAG as one extra assistant tool, not as a new app architecture**
    - Keep this bounded to:
-     - medicine leaflet dataset ingestion strategy
+     - medicine leaflet dataset ingestion/index strategy
      - retrieval-only augmentation over approved medicine knowledge
      - server-side tool integration after the base chat loop is already stable
    - Explicit non-scope:
      - replacing the reviewed medicine safety rule engine
      - pretending retrieval equals safe risk judgment
-   - Success signal:
-     - RAG improves explanation depth without becoming the first dependency of
-       the whole chat feature
+     - making retrieval a mandatory dependency for all assistant replies
+   - Current execution source:
+     - `../Lucent/plans/2026-06-22-assistant-leaflet-rag-slice.md`
 
-4. **Make medicine safety depth the next trust slice after Record fast entry**
-   - Keep the recommendation unchanged:
-     - stronger medicine safety depth is still the best trust-building slice
-       after the current Record / assistant baseline is genuinely useful
-   - Success signal:
-     - chat expands product usefulness while medicine safety remains the core
-       trust anchor
+2. **Keep assistant evolution bounded to concrete new scenarios**
+   - Only extend assistant tools/proposals when a specific missing user task is chosen
+   - Do not reopen broad tool refactors without a new capability target
+   - Keep memory optional, explicit, and user-controlled
 
-5. **Keep Web as a deliberate decision, not a stealth requirement**
+3. **Keep Web as a deliberate decision**
    - `Luminous-site` is still a competition/marketing surface, not a signed-in product shell
-   - Do not quietly turn it into product work while saying the next slice is something else
-   - If authenticated Web report preview becomes the chosen next slice later, open a dedicated plan for it and treat it as a separate product surface
-   - Success signal:
-     - Web is either clearly presentation-only, or clearly a planned product slice, never an accidental in-between
+   - If authenticated Web report preview becomes the chosen next slice later, open a dedicated plan
 
-6. **Keep the local validation discipline as a gate, not a suggestion**
-   - Repo-safe daily entry:
-     - `powershell -ExecutionPolicy Bypass -File tool/run_daily_checks.ps1`
-   - Full-stack gate entry:
-     - `powershell -ExecutionPolicy Bypass -File tool/run_fullstack_checks.ps1`
-   - Use the full-stack gate before merging changes that touch:
-     - auth/session restore
-     - Today/Report protected loading
-     - `/api/v1/user/daily-records*`
-     - generated auth/record client surface
-     - E2E helper scripts
-   - Success signal:
-     - “looks fine locally” stops being the reason something breaks after deploy
-
-## Recommended Sequence
-
-If the team wants the shortest path with the highest payoff, use this order:
-
-1. record fast-entry UX
-2. medicine safety depth
-3. only then RAG as an extra tool if still needed
-4. only then re-open the Web question
+4. **Keep the local validation discipline**
+   - Repo-safe daily: `dart run tool/run_daily_checks.dart`
+   - Full-stack gate: `dart run tool/run_fullstack_checks.dart` before changes touching auth/session, Today/Report protected loading, daily-records API, generated clients, or E2E helpers
 
 ## Deferred But Useful
-
-Keep these code paths hidden and annotated until the matching product/API job is ready:
 
 - focused truncation/polish pass for compact CN/EN labels across the five tabs
 - agent-assisted support discovery and map-backed nearby-care lookup
@@ -89,12 +44,17 @@ Keep these code paths hidden and annotated until the matching product/API job is
 - medicine scan/OCR/photo/barcode/prescription action shapes
 - local-only sleep reminder preferences beyond simple placeholder labeling
 - real authenticated Web report preview beyond the competition site
-- system health app bridging through Apple Health / Health Connect after AI permission boundaries, local data ownership, and product value are clearer
+- system health app bridging through Apple Health / Health Connect
 
-Leaflet RAG is useful, but only after the current Record and assistant product
-baseline are stable.
+## Medicine Safety Follow-Up Directions
 
-Pregnancy/lactation/special-group medication safety remains active only inside Medicine safety boundaries.
+1. **Age threshold debate** (≤18 vs <18, ≥65 vs >65)
+2. **Separate lactation field** — currently pregnancy and lactation share the same field
+3. **Allergy severity null-handling** — `severity == null` with `reaction == 'anaphylaxis'`
+4. **CN medicine interaction gap** — CN-sourced medicines invisible to interaction checker
+5. **Avoid-tier escalation policy** — structured `avoid` conclusions stay below red-flag
+6. **Duplicate cross-language matching** — "对乙酰氨基酚" vs "paracetamol"
+7. **DrugBank synonym over-generalization** — different NSAIDs sharing synonyms
 
 ## Do Not Start Yet
 

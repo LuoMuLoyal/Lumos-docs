@@ -4922,6 +4922,12 @@
             "description": "Date in YYYY-MM-DD format.",
             "example": "2026-06-04"
           },
+          "occurredTime": {
+            "type": "object",
+            "description": "Time in HH:mm 24-hour format when available.",
+            "example": "09:45",
+            "nullable": true
+          },
           "title": {
             "type": "object",
             "description": "Short label."
@@ -5346,6 +5352,11 @@
             "description": "Date in YYYY-MM-DD format. For sleep records this is the wake date (the morning the user wakes up from that sleep).",
             "example": "2026-06-04"
           },
+          "occurredTime": {
+            "type": "string",
+            "description": "Time in HH:mm 24-hour format. When omitted, UI flows may treat the record as date-only.",
+            "example": "09:45"
+          },
           "title": {
             "type": "string",
             "description": "Short label."
@@ -5391,6 +5402,12 @@
             "type": "string",
             "description": "Date in YYYY-MM-DD format.",
             "example": "2026-06-04"
+          },
+          "occurredTime": {
+            "type": "object",
+            "description": "Time in HH:mm 24-hour format. Use null to clear.",
+            "example": "09:45",
+            "nullable": true
           },
           "title": {
             "type": "object",
