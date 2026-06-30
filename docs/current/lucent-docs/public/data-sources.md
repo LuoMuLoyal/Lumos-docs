@@ -1,6 +1,6 @@
 # Data Sources
 
-Last updated: 2026-06-05
+Last updated: 2026-06-27
 
 ## Target Directory
 
@@ -14,24 +14,34 @@ This directory is not tracked by Git and must not be packaged into Flutter.
 
 ## Current Sources
 
-- `FullDrugDetail.xlsx`: detailed Chinese medicine product and instruction source.
+- `FullDrugDetail.xlsx`: raw Chinese medicine product catalog (product metadata, sparse instruction fields).
+- `药品说明书数据库_医药数据查询/`: raw scraped Chinese medicine leaflets from yaozs.com (rich instruction text, sparse product metadata).
+- `ChineseDrugData_Master_V2/ChineseDrugData_Master_V2.xlsx`: **recommended CN source for Lucent as of 4.0.0**. Built by `DrugDataBase/ChineseDrugData_Master_V2/build_master_v2.py` from the two sources above. Each product row links to the best matched instruction via `best_instruction_id`; instruction text is no longer flattened into the product row. V1 (`ChineseDrugData_Master.xlsx`) is kept as an archived reference and should not be used for new imports.
 - DrugBank files: English scientific enrichment source, including XML, CSV, FASTA, and SDF assets.
 
 ## Practical Import Workflow
 
-- `FullDrugDetail.xlsx` can be imported with GUI tools such as DBeaver when we need a quick raw/staging load or spot-check import.
-- `drug links.csv`, `all.csv`, and `pharmacologically_active.csv` can also be handled by DBeaver or regular PostgreSQL CSV import flows.
-- `full database.xml` should not be treated as a manual GUI import. It is about 1.9 GB after unzip and should be parsed by an idempotent script into normalized tables.
-- Do not convert `full database.xml` to `xlsx` as a normal workflow. `xlsx` adds a row/column flattening step, size overhead, Excel/DBeaver cell limits, and loses the benefit of streaming the XML incrementally.
-- Lucent now has durable destination tables for both sources. Tool-based import is acceptable for the Chinese source, but the DrugBank XML path should stay scripted so we can reproduce it.
+1. Build the CN master file first:
+   ```powershell
+   cd ../DrugDataBase
+   .venv/Scripts/python ChineseDrugData_Master_V2/build_master_v2.py
+   # or on msys bash: .venv/bin/python ChineseDrugData_Master_V2/build_master_v2.py
+   ```
+   This produces `ChineseDrugData_Master_V2/ChineseDrugData_Master_V2.xlsx`, which is the preferred source for `cn-products` import. The V1 `build_cn_master.py` output is archived and no longer used.
+2. `ChineseDrugData_Master_V2/ChineseDrugData_Master_V2.xlsx` can be imported with GUI tools such as DBeaver for quick raw/staging load or spot-check import. V1 (`ChineseDrugData_Master.xlsx`) is archived and should not be used for new imports.
+3. `drug links.csv`, `all.csv`, and `pharmacologically_active.csv` can also be handled by DBeaver or regular PostgreSQL CSV import flows.
+4. `full database.xml` should not be treated as a manual GUI import. It is about 1.9 GB after unzip and should be parsed by an idempotent script into normalized tables.
+5. Do not convert `full database.xml` to `xlsx` as a normal workflow. `xlsx` adds a row/column flattening step, size overhead, Excel/DBeaver cell limits, and loses the benefit of streaming the XML incrementally.
+6. Lucent now has durable destination tables for both sources. Tool-based import is acceptable for the Chinese master source, but the DrugBank XML path should stay scripted so we can reproduce it.
 
 ## Scripted Import Commands
 
 Recommended local preparation:
 
-1. `pnpm dev:stack`
-2. `pnpm db:migrate`
-3. `pip install -r scripts/import/medicine/requirements.txt` if the Chinese source is still `.xlsx`
+1. Build `ChineseDrugData_Master_V2/ChineseDrugData_Master_V2.xlsx` (see [CN Master Build](#cn-master-build)).
+2. `pnpm dev:stack`
+3. `pnpm db:migrate`
+4. `pip install -r scripts/import/medicine/requirements.txt` if the Chinese master source is still `.xlsx`
 
 Default scripted import order:
 
@@ -45,13 +55,23 @@ This runs:
 2. `drugbank-links`
 3. `drugbank-targets-all`
 4. `drugbank-targets-active`
-5. `cn-products`
+5. `cn-leaflets`
+6. `cn-products`
+7. `cn-product-leaflet-links`
 
 Why this order:
 
 - `drugbank_external_links` depends on `drugbank_drugs.drugbank_id`.
 - `drugbank_drug_targets` depends on both imported DrugBank drugs and imported target rows.
-- Chinese products are independent and can run last.
+- `cn_medicine_product_leaflet_links` depends on both `cn_medicine_products` and `cn_medicine_leaflets`, so it runs last.
+
+Chinese source notes:
+
+- The default source for all CN commands is `../DrugDataBase/ChineseDrugData_Master_V2/ChineseDrugData_Master_V2.xlsx`.
+- `cn-products` reads sheet `ProductsEnriched`.
+- `cn-leaflets` reads sheet `InstructionsClean`.
+- `cn-product-leaflet-links` reads both `ProductsEnriched` (for product id mapping and best-match metadata) and `ProductInstructionLinks` (exact-code candidates), then guarantees a best-match link for every product regardless of whether it was matched by `exact_code` or `fuzzy_name`.
+- If you need to override, pass `--source <path>` to the import command.
 
 Smoke-test example:
 
@@ -62,7 +82,7 @@ node scripts/import/medicine/import-medicine-datasets.ts --limit 20 --with-hash
 Useful options:
 
 - `-Command cn-products` or `-Command drugbank-drugs` to run one dataset only.
-- `-SourcePath <file>` to override the default file for a single dataset import.
+- `-SourcePath <file>` to override the default file for a single dataset import (for `cn-products`, this overrides `ChineseDrugData_Master_V2/ChineseDrugData_Master_V2.xlsx`).
 - `-NodeEnv test` to target the test database intentionally.
 - `-BatchSize 250` to tune upsert batch size.
 - `-SourceVersion 2026-05-30` to persist the export/version string into `drug_source_imports.source_version`.
@@ -80,7 +100,7 @@ Chinese source note:
 Lucent keeps the Chinese and English medicine datasets separate at query time. The two sources describe different things:
 
 - English source (DrugBank XML/CSV): scientific drug entities, identifiers, mechanisms, pharmacology, targets, and interactions. This is the default medicine knowledge source for the personal health copilot.
-- Chinese source (`FullDrugDetail.xlsx`): Chinese market medicine products and package insert fields. This is the regional execution source for Chinese product/package lookup.
+- Chinese source (`ChineseDrugData_Master_V2/ChineseDrugData_Master_V2.xlsx`): Chinese market medicine products linked to package insert text, with quality scores and candidate metadata. This is the locked regional execution source for Chinese product/package lookup and CN leaflet RAG in 4.0.0.
 
 Do not force both sources into one canonical medicine table in Phase 1. Matching Chinese products to DrugBank drug entities is a later enrichment task because one Chinese product can map to multiple active ingredients, and one DrugBank drug can map to many brands/products.
 
@@ -93,14 +113,17 @@ Do not invent empty columns just to make `cn_medicine_products` and `drugbank_dr
 
 Recommended durable tables after staging:
 
-| Table                     | Purpose                                                                                            |
-| ------------------------- | -------------------------------------------------------------------------------------------------- |
-| `cn_medicine_products`    | One row per Chinese product/specification from `FullDrugDetail.xlsx`.                              |
-| `drugbank_drugs`          | One row per primary DrugBank drug entry from `full database.xml`.                                  |
-| `drugbank_external_links` | External identifiers and consumer links from `drug links.csv` plus XML external identifiers/links. |
-| `drugbank_targets`        | Target/polypeptide rows from `all.csv` or `pharmacologically_active.csv`.                          |
-| `drugbank_drug_targets`   | Many-to-many relationship between DrugBank drugs and target rows.                                  |
-| `drug_source_imports`     | Import run metadata: source name, version/export date, file hash, row counts, rejection summary.   |
+| Table                               | Purpose                                                                                                         |
+| ----------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `cn_medicine_products`              | One row per Chinese product/specification from `ChineseDrugData_Master_V2.xlsx`.                                |
+| `cn_medicine_leaflets`              | One row per cleaned yaozs instruction from `ChineseDrugData_Master_V2.xlsx`.                                    |
+| `cn_medicine_product_leaflet_links` | Product-to-leaflet links with match type, approval code, and match score from `ChineseDrugData_Master_V2.xlsx`. |
+| `medicine_leaflet_chunks`           | Chunked leaflet text for RAG; empty until the rebuild-leaflet-index pipeline runs.                              |
+| `drugbank_drugs`                    | One row per primary DrugBank drug entry from `full database.xml`.                                               |
+| `drugbank_external_links`           | External identifiers and consumer links from `drug links.csv` plus XML external identifiers/links.              |
+| `drugbank_targets`                  | Target/polypeptide rows from `all.csv` or `pharmacologically_active.csv`.                                       |
+| `drugbank_drug_targets`             | Many-to-many relationship between DrugBank drugs and target rows.                                               |
+| `drug_source_imports`               | Import run metadata: source name, version/export date, file hash, row counts, rejection summary.                |
 
 These durable tables now exist in Lucent's Prisma schema and migration history, even though the real source data has not been imported yet.
 
@@ -110,57 +133,164 @@ Optional later table:
 | ------------------------- | ------------------------------------------------------------------------------------------------------- |
 | `medicine_source_matches` | Reviewed mapping between `cn_medicine_products` and `drugbank_drugs`, with match method and confidence. |
 
+## RAG Knowledge Sources
+
+Medicine RAG currently uses chunked Chinese package-insert text from `cn_medicine_leaflets`. The chunks are produced by `scripts/import/medicine/rebuild-leaflet-index.ts` and stored in `medicine_leaflet_chunks`. The assistant retrieves them via `get_medicine_leaflet_context`, which first resolves a `cn_medicine_products` row and then reads linked leaflet chunks. This keeps retrieval tied to a concrete, approved product label.
+
+### Evaluated but not-yet-integrated source: 医疗问答数据集
+
+- **Location:** `DrugDataBase/医疗问答数据集一共135万条/数据集/alpaca_zh_demo.json`
+- **Size:** ~1.83 GB, ~1.36 million records
+- **Format:** JSON array of Alpaca-style objects: `{ "id": "DX_N", "instruction": "问题", "output": "回答" }`
+- **Status:** available on disk, not imported into PostgreSQL, not indexed for RAG.
+
+Why it is different from leaflet RAG:
+
+- Leaflets are official package inserts tied to a product; the Q&A set is generic medical question/answer content of unknown provenance.
+- The current retrieval tool is product-first; the Q&A set is open-domain and would need a separate retrieval path (e.g., a `medical_qa_chunks` table + semantic search).
+- Many answers contain diagnosis and treatment recommendations. Using them verbatim would cross the project's medical red line.
+
+**Boundaries if integrated in the future:**
+
+1. **Scope restriction:** only use it for general health education, symptom explanations, and "when to see a doctor" guidance. Exclude diagnosis, prescription, dosage, and treatment plans.
+2. **Content filtering:** pre-filter or tag records; drop or block high-risk categories.
+3. **Disclaimer:** every answer sourced from this dataset must be labeled as reference-only and not a substitute for professional medical advice.
+4. **Human review:** treat the dataset as unverified; do not present it as authoritative.
+5. **Separate table:** do not mix Q&A chunks with leaflet chunks; keep distinct `source_kind` and retrieval logic.
+6. **Legal/compliance review:** confirm with legal/product before enabling user-facing retrieval.
+
+As of 4.0.0, `ChineseDrugData_Master_V2/ChineseDrugData_Master_V2.xlsx` is the locked CN source for both structured product lookup and leaflet RAG. The data fusion pipeline is frozen for 4.0.0; further improvements (DrugBank bridging, product aggregation, English translation) are scheduled for 4.x.
+
 ## Chinese Source Mapping
 
-Import `FullDrugDetail.xlsx` sheet `总的` into a raw staging table first, then normalize into `cn_medicine_products`.
+Import `ChineseDrugData_Master_V2/ChineseDrugData_Master_V2.xlsx` sheets into Lucent-owned durable tables:
 
-| XLSX column               | `cn_medicine_products` field | Notes                                                          |
-| ------------------------- | ---------------------------- | -------------------------------------------------------------- |
-| `product_name`            | `name`                       | Required search/display name. Keep the original text.          |
-| `image_url`               | `image_url`                  | Keep source URL; proxy/cache decision remains separate.        |
-| `price`                   | `price_text`                 | Keep as text because values may be empty or non-normalized.    |
-| `package_spec`            | `package_spec`               | Product-specific strength/package text.                        |
-| `approval_number`         | `approval_number`            | Chinese approval number; useful for dedupe and detail display. |
-| `manufacturer`            | `manufacturer`               | Manufacturer display/filter field.                             |
-| `drug_type`               | `drug_type`                  | Example: prescription / OTC text.                              |
-| `main_category`           | `main_category`              | Broad category.                                                |
-| `subcategory`             | `subcategory`                | Secondary category.                                            |
-| `detail_url`              | `source_url`                 | Original detail page.                                          |
-| `brand_name`              | `brand_name`                 | Optional brand/trade name.                                     |
-| `ingredients`             | `ingredients`                | Package insert field.                                          |
-| `properties`              | `properties`                 | Package insert field.                                          |
-| `indications`             | `indications`                | Package insert field.                                          |
-| `dosage`                  | `dosage`                     | Package insert field.                                          |
-| `adverse_reactions`       | `adverse_reactions`          | Package insert field.                                          |
-| `contraindications`       | `contraindications`          | Package insert field.                                          |
-| `precautions`             | `precautions`                | Package insert field.                                          |
-| `pediatric_use`           | `pediatric_use`              | Package insert field.                                          |
-| `geriatric_use`           | `geriatric_use`              | Package insert field.                                          |
-| `pregnancy_lactation`     | `pregnancy_lactation`        | Package insert field.                                          |
-| `pharmacology_toxicology` | `pharmacology_toxicology`    | Package insert field.                                          |
-| `drug_interactions`       | `drug_interactions`          | Package insert field.                                          |
-| `pharmacokinetics`        | `pharmacokinetics`           | Package insert field.                                          |
-| `overdose`                | `overdose`                   | Package insert field.                                          |
-| `storage`                 | `storage`                    | Package insert field.                                          |
-| `validity_period`         | `validity_period`            | Package insert field.                                          |
-| `barcode`                 | `barcode`                    | Product barcode when present.                                  |
-| `national_drug_code`      | `national_drug_code`         | National drug code when present.                               |
+- `ProductsEnriched` -> `cn_medicine_products`
+- `InstructionsClean` -> `cn_medicine_leaflets`
+- `ProductInstructionLinks` -> `cn_medicine_product_leaflet_links`
+
+These sheets are produced by `DrugDataBase/ChineseDrugData_Master_V2/build_master_v2.py`, which merges:
+
+- `FullDrugDetail.xlsx` product catalog fields.
+- The cleaned instruction rows from `药品说明书数据库_医药数据查询/` (yaozs.com leaflets).
+
+Product-level fields come from `FullDrugDetail.xlsx`; canonical instruction text comes from the cleaned yaozs rows. When no instruction matches a product, the product row still exists in `cn_medicine_products`, but it will have no linked rows in `cn_medicine_product_leaflet_links`.
+
+| XLSX column               | `cn_medicine_products` field | Notes                                                                               |
+| ------------------------- | ---------------------------- | ----------------------------------------------------------------------------------- |
+| `product_name`            | `name`                       | Required search/display name. Keep the original text.                               |
+| `image_url`               | `image_url`                  | Keep source URL; proxy/cache decision remains separate.                             |
+| `price`                   | `price_text`                 | Keep as text because values may be empty or non-normalized.                         |
+| `package_spec`            | `package_spec`               | Product-specific strength/package text.                                             |
+| `approval_number`         | `approval_number`            | Chinese approval number; useful for dedupe and detail display.                      |
+| `manufacturer`            | `manufacturer`               | Manufacturer display/filter field.                                                  |
+| `drug_type`               | `drug_type`                  | Example: prescription / OTC text.                                                   |
+| `main_category`           | `main_category`              | Broad category.                                                                     |
+| `subcategory`             | `subcategory`                | Secondary category.                                                                 |
+| `detail_url`              | `source_url`                 | Original detail page.                                                               |
+| `brand_name`              | `brand_name`                 | Optional brand/trade name.                                                          |
+| `ingredients`             | `ingredients`                | Package insert field.                                                               |
+| `properties`              | `properties`                 | Package insert field.                                                               |
+| `indications`             | `indications`                | Package insert field.                                                               |
+| `dosage`                  | `dosage`                     | Package insert field.                                                               |
+| `adverse_reactions`       | `adverse_reactions`          | Package insert field.                                                               |
+| `contraindications`       | `contraindications`          | Package insert field.                                                               |
+| `precautions`             | `precautions`                | Package insert field.                                                               |
+| `pediatric_use`           | `pediatric_use`              | Package insert field.                                                               |
+| `geriatric_use`           | `geriatric_use`              | Package insert field.                                                               |
+| `pregnancy_lactation`     | `pregnancy` + `lactation`    | Package insert field; API splits sentences by context keywords into two DTO fields. |
+| `pharmacology_toxicology` | `pharmacology_toxicology`    | Package insert field.                                                               |
+| `drug_interactions`       | `drug_interactions`          | Package insert field.                                                               |
+| `pharmacokinetics`        | `pharmacokinetics`           | Package insert field.                                                               |
+| `overdose`                | `overdose`                   | Kept from `FullDrugDetail`; yaozs source does not provide this field.               |
+| `storage`                 | `storage`                    | Enriched from matched yaozs instruction when available.                             |
+| `validity_period`         | `validity_period`            | Enriched from matched yaozs instruction when available.                             |
+| `barcode`                 | `barcode`                    | Product barcode when present.                                                       |
+| `national_drug_code`      | `national_drug_code`         | National drug code when present.                                                    |
+| `image_url_cleaned`       | `image_url_cleaned`          | Placeholder-cleaned image URL.                                                      |
+| `manufacturer_normalized` | `manufacturer_normalized`    | Manufacturer name with common suffixes stripped.                                    |
+| `approval_codes`          | `approval_codes`             | All extracted approval codes as a JSONB array.                                      |
+| `best_match_type`         | `best_match_type`            | `exact_code` or `fuzzy_name`.                                                       |
+| `best_match_score`        | `best_match_score`           | Score of the best matched instruction.                                              |
+| `top_candidate_ids`       | `top_candidate_ids`          | Top-5 instruction candidate ids as a JSONB array.                                   |
+| `top_candidate_scores`    | `top_candidate_scores`       | Top-5 candidate scores as a JSONB array.                                            |
+| `candidate_count`         | `candidate_count`            | Number of candidates considered.                                                    |
+| `match_quality_overall`   | `match_quality_overall`      | Composite quality score (0-~200).                                                   |
+| `match_quality_approval`  | `match_quality_approval`     | Approval-code match quality component.                                              |
+| `match_quality_name`      | `match_quality_name`         | Name match quality component.                                                       |
+| `match_quality_maker`     | `match_quality_maker`        | Manufacturer match quality component.                                               |
+| `match_quality_leaflet`   | `match_quality_leaflet`      | Leaflet completeness quality component.                                             |
+| `match_quality_penalty`   | `match_quality_penalty`      | Multi-candidate / conflict penalty.                                                 |
+| `match_quality_notes`     | `match_quality_notes`        | Quality notes as a JSONB array.                                                     |
+| `drugbank_ids`            | `drugbank_ids`               | Optional DrugBank ids as a JSONB array.                                             |
+
+In V2, `ProductsEnriched` no longer flattens matched instruction text into the product row. Structured instruction text lives in `cn_medicine_leaflets`, and `cn_medicine_products` only carries metadata (`best_instruction_id`, `best_match_type`, `match_quality_*`, `top_candidate_ids`, etc.) to select and rank leaflets. `overdose` has no yaozs counterpart and remains from `FullDrugDetail`.
 
 Recommended technical fields:
 
-| Field                       | Notes                                                                                                                 |
-| --------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| `id`                        | Lucent UUID or generated stable id.                                                                                   |
-| `source_name`               | Constant such as `full_drug_detail`.                                                                                  |
-| `source_row_number`         | Original row number for traceability.                                                                                 |
-| `search_text`               | Generated text for full-text search from name, brand, manufacturer, approval number, barcode, and national drug code. |
-| `created_at` / `updated_at` | Lucent timestamps.                                                                                                    |
+| Field                       | Notes                                                                                                                                          |
+| --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `id`                        | Lucent UUID or generated stable id.                                                                                                            |
+| `source_name`               | Constant such as `chinese_drug_data_master`.                                                                                                   |
+| `source_row_number`         | Original row number for traceability.                                                                                                          |
+| `search_text`               | Generated text for full-text search from name, brand, manufacturer, normalized manufacturer, approval number, barcode, and national drug code. |
+| `created_at` / `updated_at` | Lucent timestamps.                                                                                                                             |
 
 Suggested uniqueness rules:
 
 - Prefer `(approval_number, package_spec, manufacturer)` when `approval_number` exists.
 - Fall back to `(name, package_spec, manufacturer, national_drug_code)` when approval number is missing.
 - Keep apparent duplicates in staging and report them during import instead of silently dropping rows.
+
+## CN Master Build (V2)
+
+The canonical Chinese import source is generated, not hand-maintained. **4.0.0 locks the V2 fusion result; no further fusion-quality iterations are planned for this release.**
+
+```powershell
+cd ../DrugDataBase
+python -m venv .venv
+.venv/Scripts/python -m pip install openpyxl
+.venv/Scripts/python ChineseDrugData_Master_V2/build_master_v2.py
+```
+
+On msys bash use `.venv/bin/python` instead of `.venv/Scripts/python`.
+
+`build_master_v2.py` reads:
+
+- `FullDrugDetail.xlsx` (product catalog)
+- `药品说明书数据库_医药数据查询/*.xlsx` (yaozs leaflets)
+
+and writes `ChineseDrugData_Master_V2/ChineseDrugData_Master_V2.xlsx` with these sheets:
+
+| Sheet                     | Purpose                                                                                                                                      |
+| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Summary`                 | Build metadata and counts.                                                                                                                   |
+| `ProductsEnriched`        | One row per FullDrugDetail product, with `best_instruction_id` and quality metadata. This is the sheet imported into `cn_medicine_products`. |
+| `OrphanInstructions`      | Instruction rows that did not match any product. Kept for future use, not imported in Phase 1.                                               |
+| `InstructionsClean`       | All kept instruction rows in normalized English column names.                                                                                |
+| `ProductInstructionLinks` | Exact-code product-instruction links with match type, match key, and text match score.                                                       |
+| `FuzzyMatches`            | Fuzzy-name fallback matches (truncated to the first 100k rows in the `.xlsx`; full audit data must be exported separately if needed).        |
+| `Conflicts`               | Instruction rows where `编号` and `批准文号` extracted disjoint approval codes.                                                              |
+| `DroppedSummary`          | Low-value instruction rows dropped during build (empty or minimal content).                                                                  |
+
+Key V2 improvements over V1:
+
+- **Coverage:** instruction matching rose from ~56% to ~85.7% via fuzzy-name fallback.
+- **Quality scores:** every product row carries `match_quality_*` fields so search/retrieval can rank exact matches above fuzzy matches.
+- **Multiple candidates:** top-5 instruction candidates are retained per product.
+- **Normalized manufacturers:** `manufacturer_normalized` improves matching and search.
+- **Cleaned images:** placeholder image URLs are emptied.
+- **DrugBank bridge:** optional `drugbank_ids` field for future scientific enrichment.
+
+Cleaning rules applied during build:
+
+- All text fields are whitespace-normalized and illegal Excel characters removed.
+- Markers such as `尚不明确`, `无`, `null`, `重复资料` are treated as empty.
+- Approval codes are extracted from both `编号` and `批准文号` using pattern `[A-Z]{1,3}/d{8}`. When the two fields disagree, `批准文号` is preferred and the row is flagged as `approval_conflict`.
+- Product-instruction matching first uses approval code; unmatched products then fall back to fuzzy matching on generic name and normalized manufacturer.
+- Instruction rows without approval codes and fewer than two meaningful leaflet fields are dropped as low value.
+
+Producer name normalization **is** applied in V2 via suffix stripping (`有限公司`, `制药厂`, `药业`, etc.) and stored in `manufacturer_normalized`.
 
 ## DrugBank Source Mapping
 

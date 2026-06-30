@@ -291,6 +291,96 @@
         "tags": ["Auth"]
       }
     },
+    "/api/v1/auth/oauth/apple/callback": {
+      "post": {
+        "operationId": "AuthController_loginWithApple_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AppleOAuthCallbackDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Apple 登录回调",
+        "tags": ["Auth"]
+      }
+    },
+    "/api/v1/auth/oauth/qq/authorize": {
+      "post": {
+        "operationId": "AuthController_createQqAuthorizeUrl_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QqOAuthAuthorizeDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OAuthAuthorizeResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "创建 QQ 登录授权地址",
+        "tags": ["Auth"]
+      }
+    },
+    "/api/v1/auth/oauth/qq/callback": {
+      "post": {
+        "operationId": "AuthController_loginWithQq_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QqOAuthCallbackDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "QQ 登录回调",
+        "tags": ["Auth"]
+      }
+    },
     "/api/v1/auth/logout": {
       "post": {
         "operationId": "AuthController_logout_v1",
@@ -368,6 +458,93 @@
           }
         ],
         "summary": "撤销指定会话",
+        "tags": ["Auth"]
+      }
+    },
+    "/api/v1/auth/2fa/setup": {
+      "post": {
+        "operationId": "AuthController_setupTwoFactor_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "summary": "生成 2FA 绑定密钥和二维码",
+        "tags": ["Auth"]
+      }
+    },
+    "/api/v1/auth/2fa/confirm": {
+      "post": {
+        "operationId": "AuthController_confirmTwoFactor_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConfirmTwoFactorDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "summary": "确认 2FA 绑定（校验 TOTP）",
+        "tags": ["Auth"]
+      }
+    },
+    "/api/v1/auth/2fa/verify": {
+      "post": {
+        "operationId": "AuthController_verifyTwoFactor_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyTwoFactorDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "登录后验证 TOTP 或恢复码，签发正式 token",
+        "tags": ["Auth"]
+      }
+    },
+    "/api/v1/auth/2fa": {
+      "delete": {
+        "operationId": "AuthController_disableTwoFactor_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "summary": "禁用 2FA",
         "tags": ["Auth"]
       }
     },
@@ -525,6 +702,258 @@
         },
         "summary": "重置密码",
         "tags": ["Auth"]
+      }
+    },
+    "/api/v1/user/notifications": {
+      "post": {
+        "operationId": "NotificationsController_create_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateNotificationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotificationListResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "summary": "Create a notification (internal/test)",
+        "tags": ["Notifications"]
+      },
+      "get": {
+        "operationId": "NotificationsController_findAll_v1",
+        "parameters": [
+          {
+            "name": "page",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotificationListResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "summary": "List user notifications",
+        "tags": ["Notifications"]
+      }
+    },
+    "/api/v1/user/notifications/unread-count": {
+      "get": {
+        "operationId": "NotificationsController_getUnreadCount_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnreadCountResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "summary": "Get unread notification count",
+        "tags": ["Notifications"]
+      }
+    },
+    "/api/v1/user/notifications/{id}": {
+      "get": {
+        "operationId": "NotificationsController_findOne_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotificationDetailResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "summary": "Get a notification detail",
+        "tags": ["Notifications"]
+      },
+      "delete": {
+        "operationId": "NotificationsController_remove_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "summary": "Delete a notification",
+        "tags": ["Notifications"]
+      }
+    },
+    "/api/v1/user/notifications/{id}/read": {
+      "patch": {
+        "operationId": "NotificationsController_markAsRead_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotificationDetailResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "summary": "Mark a notification as read",
+        "tags": ["Notifications"]
+      }
+    },
+    "/api/v1/user/notifications/{id}/unread": {
+      "patch": {
+        "operationId": "NotificationsController_markAsUnread_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotificationDetailResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "summary": "Mark a notification as unread",
+        "tags": ["Notifications"]
+      }
+    },
+    "/api/v1/user/notifications/mark-all-read": {
+      "patch": {
+        "operationId": "NotificationsController_markAllAsRead_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnreadCountResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "summary": "Mark all notifications as read",
+        "tags": ["Notifications"]
       }
     },
     "/api/v1/account": {
@@ -862,6 +1291,42 @@
         "tags": ["Account"]
       }
     },
+    "/api/v1/medicines/safety-tips": {
+      "get": {
+        "operationId": "MedicinesController_getSafetyTips_v1",
+        "parameters": [
+          {
+            "name": "exclude",
+            "required": false,
+            "in": "query",
+            "description": "上一次返回的提示 id 列表，用于相邻两次去重",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MedicineSafetyTipResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "随机返回用药安全提示",
+        "tags": ["Medicines"]
+      }
+    },
     "/api/v1/medicines": {
       "get": {
         "operationId": "MedicinesController_search_v1",
@@ -982,6 +1447,34 @@
           }
         },
         "summary": "Get medicine detail from a selected knowledge source",
+        "tags": ["Medicines"]
+      }
+    },
+    "/api/v1/medicines/recognize": {
+      "post": {
+        "operationId": "MedicinesController_recognize_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RecognizeMedicineDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "summary": "AI识别药盒图片，提取药品信息",
         "tags": ["Medicines"]
       }
     },
@@ -2059,7 +2552,25 @@
             "schema": {
               "default": "last_7_days",
               "type": "string",
-              "enum": ["last_7_days", "last_30_days"]
+              "enum": ["last_7_days", "last_30_days", "custom"]
+            }
+          },
+          {
+            "name": "startDate",
+            "required": false,
+            "in": "query",
+            "description": "Required when range is \"custom\". ISO 8601 date string (YYYY-MM-DD).",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "endDate",
+            "required": false,
+            "in": "query",
+            "description": "Required when range is \"custom\". ISO 8601 date string (YYYY-MM-DD).",
+            "schema": {
+              "type": "string"
             }
           }
         ],
@@ -2439,6 +2950,47 @@
         "tags": ["Today Analysis"]
       }
     },
+    "/api/v1/user/today-analysis/recommendations": {
+      "get": {
+        "operationId": "TodayAnalysisController_getRecommendations_v1",
+        "parameters": [
+          {
+            "name": "exclude",
+            "required": false,
+            "in": "query",
+            "description": "上一次返回的推荐 id 列表，用于相邻两次去重",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TodayRecommendationResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "summary": "随机返回今日健康推荐",
+        "tags": ["Today Analysis"]
+      }
+    },
     "/api/v1/user/today-analysis/generate/stream": {
       "post": {
         "operationId": "TodayAnalysisController_generateStream_v1",
@@ -2583,6 +3135,34 @@
         ],
         "summary": "Get the latest data export request",
         "tags": ["Data Export"]
+      }
+    },
+    "/api/v1/user/files/upload": {
+      "post": {
+        "operationId": "FilesController_createUpload_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateFileUploadDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "summary": "Create a presigned upload URL for a file",
+        "tags": ["Files"]
       }
     }
   },
@@ -3083,6 +3663,52 @@
         },
         "required": ["code"]
       },
+      "AppleOAuthCallbackDto": {
+        "type": "object",
+        "properties": {
+          "identityToken": {
+            "type": "string",
+            "description": "Apple 登录返回的 identityToken (JWT)"
+          },
+          "authorizationCode": {
+            "type": "string",
+            "description": "Apple 登录返回的 authorizationCode（可选）"
+          },
+          "givenName": {
+            "type": "string",
+            "description": "Apple 返回的 givenName（首次登录时返回）"
+          },
+          "familyName": {
+            "type": "string",
+            "description": "Apple 返回的 familyName（首次登录时返回）"
+          }
+        },
+        "required": ["identityToken"]
+      },
+      "QqOAuthAuthorizeDto": {
+        "type": "object",
+        "properties": {
+          "callbackUri": {
+            "type": "string",
+            "description": "QQ 授权完成后的客户端回跳地址",
+            "example": "http://127.0.0.1:49152/oauth/qq"
+          }
+        }
+      },
+      "QqOAuthCallbackDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "QQ 授权码"
+          },
+          "state": {
+            "type": "string",
+            "description": "授权时生成的 state"
+          }
+        },
+        "required": ["code", "state"]
+      },
       "LogoutDto": {
         "type": "object",
         "properties": {
@@ -3114,6 +3740,33 @@
           }
         },
         "required": ["code", "message", "data"]
+      },
+      "ConfirmTwoFactorDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "TOTP verification code",
+            "example": "123456"
+          }
+        },
+        "required": ["code"]
+      },
+      "VerifyTwoFactorDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "TOTP code or recovery code",
+            "example": "123456"
+          },
+          "tempToken": {
+            "type": "string",
+            "description": "Temporary token from login response",
+            "example": "ZXhhbXBsZS10ZW1wLXRva2Vu"
+          }
+        },
+        "required": ["code", "tempToken"]
       },
       "RefreshDto": {
         "type": "object",
@@ -3305,6 +3958,212 @@
           }
         },
         "required": ["email", "code", "password"]
+      },
+      "UserNotificationType": {
+        "type": "string",
+        "enum": [
+          "ai_today_summary",
+          "ai_proactive_suggestion",
+          "medicine_missed_dose",
+          "password_changed",
+          "report_generated",
+          "medicine_reminder",
+          "system_announcement"
+        ]
+      },
+      "CreateNotificationDto": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/UserNotificationType"
+              }
+            ]
+          },
+          "title": {
+            "type": "string",
+            "description": "Notification title."
+          },
+          "content": {
+            "type": "string",
+            "description": "Notification content body."
+          },
+          "action": {
+            "type": "string",
+            "nullable": true,
+            "description": "Action route target for the frontend."
+          },
+          "actionPayload": {
+            "type": "object",
+            "nullable": true,
+            "description": "Extra payload for the action."
+          }
+        },
+        "required": ["type", "title", "content"]
+      },
+      "NotificationListItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique notification identifier."
+          },
+          "type": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/UserNotificationType"
+              }
+            ]
+          },
+          "title": {
+            "type": "string",
+            "description": "Notification title."
+          },
+          "content": {
+            "type": "string",
+            "description": "Notification content body."
+          },
+          "action": {
+            "type": "string",
+            "nullable": true,
+            "description": "Action route target for the frontend."
+          },
+          "actionPayload": {
+            "type": "object",
+            "nullable": true,
+            "description": "Extra payload for the action."
+          },
+          "isRead": {
+            "type": "boolean",
+            "description": "Whether the notification has been read."
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "ISO-8601 timestamp when the notification was created."
+          }
+        },
+        "required": ["id", "type", "title", "content", "isRead", "createdAt"]
+      },
+      "NotificationListResponseDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "number",
+            "description": "Result code.",
+            "example": 0
+          },
+          "message": {
+            "type": "string",
+            "description": "Message.",
+            "example": ""
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NotificationListItemDto"
+            }
+          },
+          "total": {
+            "type": "number",
+            "description": "Total count of notifications for the user."
+          }
+        },
+        "required": ["code", "message", "items", "total"]
+      },
+      "UnreadCountResponseDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "number",
+            "description": "Result code.",
+            "example": 0
+          },
+          "message": {
+            "type": "string",
+            "description": "Message.",
+            "example": ""
+          },
+          "count": {
+            "type": "number",
+            "description": "Number of unread notifications.",
+            "example": 3
+          }
+        },
+        "required": ["code", "message", "count"]
+      },
+      "NotificationDetailDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique notification identifier."
+          },
+          "type": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/UserNotificationType"
+              }
+            ]
+          },
+          "title": {
+            "type": "string",
+            "description": "Notification title."
+          },
+          "content": {
+            "type": "string",
+            "description": "Notification content body."
+          },
+          "action": {
+            "type": "string",
+            "nullable": true,
+            "description": "Action route target for the frontend."
+          },
+          "actionPayload": {
+            "type": "object",
+            "nullable": true,
+            "description": "Extra payload for the action."
+          },
+          "isRead": {
+            "type": "boolean",
+            "description": "Whether the notification has been read."
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "ISO-8601 timestamp when the notification was created."
+          },
+          "readAt": {
+            "type": "string",
+            "nullable": true,
+            "description": "ISO-8601 timestamp when the notification was read."
+          }
+        },
+        "required": ["id", "type", "title", "content", "isRead", "createdAt"]
+      },
+      "NotificationDetailResponseDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "number",
+            "description": "Result code.",
+            "example": 0
+          },
+          "message": {
+            "type": "string",
+            "description": "Message.",
+            "example": ""
+          },
+          "data": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/NotificationDetailDto"
+              }
+            ]
+          }
+        },
+        "required": ["code", "message", "data"]
       },
       "AccountIdentityDto": {
         "type": "object",
@@ -3739,18 +4598,6 @@
             "type": "object",
             "nullable": true
           },
-          "pediatricUse": {
-            "type": "object",
-            "nullable": true
-          },
-          "geriatricUse": {
-            "type": "object",
-            "nullable": true
-          },
-          "pregnancyLactation": {
-            "type": "object",
-            "nullable": true
-          },
           "pharmacologyToxicology": {
             "type": "object",
             "nullable": true
@@ -3790,9 +4637,35 @@
           "imageUrl": {
             "type": "object",
             "nullable": true
+          },
+          "drugbankIds": {
+            "nullable": true,
+            "description": "Optional mapped DrugBank IDs used for interaction checking.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         },
         "required": ["kind"]
+      },
+      "MedicineSafetyTipResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+          },
+          "text": {
+            "type": "string",
+            "example": "服药期间如需饮酒，建议间隔至少 24 小时以上。"
+          },
+          "category": {
+            "type": "string",
+            "example": "alcohol"
+          }
+        },
+        "required": ["id", "text", "category"]
       },
       "MedicineSearchItemDto": {
         "type": "object",
@@ -3964,6 +4837,17 @@
         },
         "required": ["code", "message", "data"]
       },
+      "RecognizeMedicineDto": {
+        "type": "object",
+        "properties": {
+          "imageUrl": {
+            "type": "string",
+            "description": "Public URL of the medicine box image",
+            "example": "https://cos.example.com/files/abc.jpg"
+          }
+        },
+        "required": ["imageUrl"]
+      },
       "UserHealthSummaryDto": {
         "type": "object",
         "properties": {
@@ -4016,23 +4900,6 @@
         "enum": ["female", "male", "intersex", "unknown"],
         "description": "Sex assigned at birth."
       },
-      "PregnancyState": {
-        "type": "string",
-        "enum": [
-          "not_applicable",
-          "unknown",
-          "not_pregnant",
-          "pregnant",
-          "trying",
-          "postpartum"
-        ],
-        "description": "Pregnancy state for personalized medical guidance."
-      },
-      "LactationState": {
-        "type": "string",
-        "enum": ["not_applicable", "unknown", "no", "yes"],
-        "description": "Lactation state for personalized medical guidance."
-      },
       "UnitSystem": {
         "type": "string",
         "enum": ["metric", "imperial"],
@@ -4062,26 +4929,6 @@
             "description": "Height in centimeters.",
             "example": 168,
             "nullable": true
-          },
-          "pregnancyState": {
-            "description": "Pregnancy state for personalized medical guidance.",
-            "example": "not_pregnant",
-            "nullable": true,
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/PregnancyState"
-              }
-            ]
-          },
-          "lactationState": {
-            "description": "Lactation state for personalized medical guidance.",
-            "example": "no",
-            "nullable": true,
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/LactationState"
-              }
-            ]
           },
           "bloodType": {
             "type": "object",
@@ -4132,8 +4979,6 @@
           "birthDate",
           "sexAtBirth",
           "heightCm",
-          "pregnancyState",
-          "lactationState",
           "bloodType",
           "locale",
           "timezone",
@@ -4521,26 +5366,6 @@
             "minimum": 1,
             "maximum": 300,
             "nullable": true
-          },
-          "pregnancyState": {
-            "description": "Pregnancy state for personalized medical guidance. Use null to clear.",
-            "example": "not_pregnant",
-            "nullable": true,
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/PregnancyState"
-              }
-            ]
-          },
-          "lactationState": {
-            "description": "Lactation state for personalized medical guidance. Use null to clear.",
-            "example": "no",
-            "nullable": true,
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/LactationState"
-              }
-            ]
           },
           "bloodType": {
             "type": "object",
@@ -6186,7 +7011,7 @@
         "properties": {
           "range": {
             "type": "string",
-            "enum": ["last_7_days", "last_30_days"]
+            "enum": ["last_7_days", "last_30_days", "custom"]
           },
           "startDate": {
             "type": "string"
@@ -6263,8 +7088,16 @@
         "properties": {
           "range": {
             "type": "string",
-            "enum": ["last_7_days", "last_30_days"],
+            "enum": ["last_7_days", "last_30_days", "custom"],
             "description": "Supported report summary aggregation range."
+          },
+          "startDate": {
+            "type": "string",
+            "description": "Required when range is \"custom\". ISO 8601 date string (YYYY-MM-DD)."
+          },
+          "endDate": {
+            "type": "string",
+            "description": "Required when range is \"custom\". ISO 8601 date string (YYYY-MM-DD)."
           }
         }
       },
@@ -6286,7 +7119,7 @@
         "properties": {
           "range": {
             "type": "string",
-            "enum": ["last_7_days", "last_30_days"]
+            "enum": ["last_7_days", "last_30_days", "custom"]
           },
           "startDate": {
             "type": "string"
@@ -6309,6 +7142,9 @@
           "actionLabel": {
             "type": "string"
           },
+          "action": {
+            "type": "string"
+          },
           "confidenceNote": {
             "type": "string"
           }
@@ -6321,6 +7157,7 @@
           "summary",
           "bullets",
           "actionLabel",
+          "action",
           "confidenceNote"
         ]
       },
@@ -6401,6 +7238,7 @@
               "get_user_settings",
               "get_current_medicines",
               "get_sleep_summary_by_range",
+              "get_medicine_leaflet_context",
               "propose_create_daily_record",
               "propose_update_daily_record",
               "propose_delete_daily_record",
@@ -6912,6 +7750,9 @@
           "actionLabel": {
             "type": "string"
           },
+          "action": {
+            "type": "string"
+          },
           "confidenceNote": {
             "type": "string"
           }
@@ -6922,6 +7763,7 @@
           "summary",
           "bullets",
           "actionLabel",
+          "action",
           "confidenceNote"
         ]
       },
@@ -6941,6 +7783,24 @@
           }
         },
         "required": ["code", "message", "data"]
+      },
+      "TodayRecommendationResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique recommendation id"
+          },
+          "text": {
+            "type": "string",
+            "description": "Recommendation text"
+          },
+          "category": {
+            "type": "string",
+            "description": "Recommendation category"
+          }
+        },
+        "required": ["id", "text"]
       },
       "TodayAnalysisStreamResultDto": {
         "type": "object",
@@ -7260,6 +8120,27 @@
           }
         },
         "required": ["code", "message", "data"]
+      },
+      "CreateFileUploadDto": {
+        "type": "object",
+        "properties": {
+          "contentType": {
+            "type": "string",
+            "description": "MIME type",
+            "example": "image/jpeg"
+          },
+          "sizeBytes": {
+            "type": "number",
+            "description": "File size in bytes",
+            "example": 204800
+          },
+          "fileName": {
+            "type": "string",
+            "description": "Original filename",
+            "example": "photo.jpg"
+          }
+        },
+        "required": ["contentType", "sizeBytes"]
       }
     }
   }

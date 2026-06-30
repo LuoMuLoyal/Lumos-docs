@@ -3,6 +3,9 @@ node_modules/
 docs/.vitepress/cache/
 docs/.vitepress/dist/
 
+# Generated / synced content
+docs/public/compodoc/
+
 .DS_Store
 Thumbs.db
 *.log

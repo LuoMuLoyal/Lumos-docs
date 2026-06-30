@@ -28,6 +28,7 @@ const commonExcludedNames = new Set([
 
 syncCurrentDocs()
 syncArchiveDocs()
+syncCompodoc()
 removeLegacyRawArchive()
 
 function syncCurrentDocs() {
@@ -35,7 +36,7 @@ function syncCurrentDocs() {
     {
       sourceRoot: resolve(workspaceRoot, 'Lucent', 'docs'),
       targetRoot: join(docsRoot, 'current', 'lucent-docs'),
-      excludedRelativeRoots: [],
+      excludedRelativeRoots: ['compodoc'],
     },
     {
       sourceRoot: resolve(workspaceRoot, 'Luminous', 'docs'),
@@ -142,6 +143,22 @@ function syncArchiveSnapshot(sourceRoot, targetRoot, snapshotName) {
   }
 }
 
+function syncCompodoc() {
+  const sourceRoot = resolve(workspaceRoot, 'Lucent', 'docs', 'compodoc')
+  const targetRoot = join(docsRoot, 'public', 'compodoc')
+
+  if (!existsSync(sourceRoot) || !statSync(sourceRoot).isDirectory()) {
+    console.warn(
+      `Compodoc source not found at ${sourceRoot} — run "pnpm docs:compodoc" in Lucent first. Skipping.`,
+    )
+    return
+  }
+
+  console.log(`Syncing compodoc: ${sourceRoot} → ${targetRoot}`)
+  rmSync(targetRoot, { recursive: true, force: true })
+  copyRawDirectory(sourceRoot, targetRoot)
+}
+
 function removeLegacyRawArchive() {
   rmSync(join(repoRoot, 'public', 'raw', 'archive'), {
     recursive: true,
@@ -184,6 +201,25 @@ function copyDirectory(sourceRoot, targetRoot, excludedRelativeRoots) {
 
     mkdirSync(dirname(targetPath), { recursive: true })
     copyFileSync(sourcePath, targetPath)
+  }
+}
+
+function copyRawDirectory(sourceRoot, targetRoot) {
+  mkdirSync(targetRoot, { recursive: true })
+
+  for (const entry of readdirSync(sourceRoot, { withFileTypes: true })) {
+    const sourcePath = join(sourceRoot, entry.name)
+    const targetPath = join(targetRoot, entry.name)
+
+    if (entry.isDirectory()) {
+      copyRawDirectory(sourcePath, targetPath)
+      continue
+    }
+
+    if (entry.isFile()) {
+      mkdirSync(dirname(targetPath), { recursive: true })
+      copyFileSync(sourcePath, targetPath)
+    }
   }
 }
 

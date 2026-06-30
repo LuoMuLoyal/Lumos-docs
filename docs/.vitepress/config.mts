@@ -110,6 +110,7 @@ export default defineConfig({
       { text: 'Wiki', link: '/wiki/' },
       { text: 'Current', link: '/current/' },
       { text: 'API', link: '/api/' },
+      { text: '架构', link: '/compodoc/' },
       { text: 'Archive', link: '/archive/' },
     ],
     sidebar: [
@@ -119,6 +120,7 @@ export default defineConfig({
           { text: 'Wiki', link: '/wiki/' },
           { text: 'Current Docs', link: '/current/' },
           { text: 'API Docs', link: '/api/' },
+          { text: '架构文档', link: '/compodoc/' },
           { text: 'Lucent', link: '/current/lucent' },
           { text: 'Luminous', link: '/current/luminous' },
           { text: 'Archive 总览', link: '/archive/' },
